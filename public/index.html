@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<title>Websocket DB</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+<script src="/static.js"></script>
+<link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+
+<div id="info">
+  <input type="text" placeholder="Enter Table Name" id="query" autofocus zvalue="copyofperiodic" value="select * from mytest limit 30 offset 0"><br>
+  <button class="json">json</button>
+  <button class="text">text</button>
+  <button class="table">table</button>
+  <div id="usersConnected"></div>
+</div>
+<div id="data"></div>

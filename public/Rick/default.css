@@ -1,0 +1,26 @@
+table { 
+  border-spacing: 0;
+  border-collapse: collapse;
+  border: 1px solid black;
+  font: 13px arial;
+  table-layout: fixed;
+}
+
+th {
+  background: #def;
+}
+
+td, th {
+  padding: 0.3em;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #bbb;
+  white-space: nowrap;
+}
+
+#query {
+  width: 40em;
+}
+
+button.selected {
+  background: #bfb;
+}

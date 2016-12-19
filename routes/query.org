@@ -1,0 +1,106 @@
+/**
+ * Created by Oscar Valdes on 10/26/16.
+ */
+var express = require('express'),
+    mysql = require('mysql'),
+    fs = require('fs'),
+    router = express.Router(),
+    ff = require('fluent-ffmpeg'),
+    bodyParser = require('body-parser'),
+    path = require('path'),
+    moment = require('moment'),
+    tableify = require('tableify'),
+    tableName,
+    sql;
+
+var connection = mysql.createConnection({
+    host: 'soiltest',
+    user: 'root',
+    password: 'Blue$apph1re#2',
+    database: 'agdbmysql'
+});
+
+connection.connect(function(err) {
+    if (!err) {
+        console.log('Database is connected ... ');
+    } else {
+        console.log('Error connecting database ... ');
+    }
+});
+
+router.use(bodyParser.urlencoded({
+    extended: true
+}))
+
+router.post('/', function(req, res, next) {
+
+    // tableName = req.body.tName;
+    // console.log(tableName);
+    // console.log(req.body);
+  sql = req.body.tName;
+
+    console.log(sql);
+    console.log(req.body);
+    //tableName= req.query.tName;
+
+      connection.query(sql, function(err, rows, fields) {
+  //  connection.query('SELECT * FROM agdbmysql.' + '`' + tableName + '`', function(err, rows, fields) { //copy of periodic
+        if (!err) {
+
+            //***To render server-side***
+            // var html = tableify({
+            //     rows
+            // });
+          //  console.log(JSON.stringify(rows));
+
+            var stringRow = JSON.stringify(rows);
+
+            stringRow= stringRow.replace(/null/g, "\"\"");
+            stringRow= stringRow.replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):\d{2}.(\d{3})Z/g,"$2/$3/$1");
+            //console.log(stringRow);
+            //fs.writeFile('public/JSON.json', stringRow, 'utf8');
+
+
+            //console.log(stringRow);
+            //JSON.parse(stringRow);
+          //  res.json(rows);
+          res.send(stringRow);
+            //console.log(html); DO NOT LOG BIG DATA SETS!
+            //res.send(html);
+
+            // res.write(html);
+            // res.end();
+            //console.log(rows);
+
+            // var json = JSON.stringify(rows);
+            // fs.writeFile('public/example.json', json, 'utf8');
+            // res.end();
+
+
+        } else {
+
+          if(sql==""){
+            //res.status(500).json({"redirect":"http://aesl.ces.uga.edu/"});
+            res.sendStatus(500);
+            //res.json({"redirect":"http://aesl.ces.uga.edu/"});
+            //res.redirect("/");
+            //res.sendFile(path.join(__dirname+'/redirect.html'));
+            //res.sendFile(__dirname+'../public/redirect.html');//wrong
+            //res.sendFile(path.join(__dirname, '../public', 'redirect.html'));
+            //res.sendFile('/IT/Valdes/OnlineDB/public/redirect.html');
+            //res.redirect('http://aesl.ces.uga.edu/');
+            //res.redirect('http://google.com/');
+            //console.log(__dirname+'../public/redirect.html');
+            console.log(path.join(__dirname, '../public', 'redirect.html'));
+            console.log("query is empty!!!!!!!!!!");
+          }
+            //res.sendStatus(500);
+            //res.redirect('http://aesl.ces.uga.edu/');
+            console.log('Error while performing Query.' + err);
+            //res.send(err);
+        }
+
+    });
+});
+
+module.exports = router;
