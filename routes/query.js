@@ -17,10 +17,10 @@ router.use(bodyParser.urlencoded({
 
 // Define our db creds
 var db = mysql.createConnection({
-  host: 'localhost',
+  host: 'soiltest',
   user: 'root',
   password: 'Blue$apph1re#2',
-  database: 'agdb'
+  database: 'agdbmysql'
 })
 
 // Log any errors connected to the db
@@ -116,11 +116,23 @@ io.sockets.on('connection', function(socket){
         io.sockets.emit('users connected', socketCount)
     })
 
-    socket.on('query',function(sql){
+    socket.on('query',function(sql,format){
+      var type = format || 'text',
+      data = 'true',
+      fldnames= 'true';
+
       db.query(sql, function(err, rows, fields) {
-        //console.log(sql);
-        socket.emit('create table',json(rows, fields));
-        //console.log(fields);
+        if(type==='JSON'){
+        socket.emit('create table JSON',json(rows, fields));
+      }
+        else if(type==='text'){
+        socket.emit('create table text',text(rows, fields, fldnames, data));
+        }
+        else if(type === 'table') {
+        socket.emit('create table table',table(rows, fields, fldnames, data));
+        }
+
+
       });//query
     })
 

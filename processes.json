@@ -1,7 +1,7 @@
 //processes.json:
     {
       "apps" : [{
-        "name"        : "OnlineDB",
+        "name"        : "WebsocketDB",
         "script"      : "./bin/www",
         "watch"       : "../",
         "log_date_format"  : "YYYY-MM-DD HH:mm Z",
