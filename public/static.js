@@ -103,7 +103,15 @@ $('button.text').click(function(event) {
     });
 
     $('button.edit').click(function(event) {
+
+      if($('button.edit').text()==='Done'){
+        $('td').attr('contenteditable','false');
+        $('button.edit').text('edit table');
+      }
+      else{
       $('td').attr('contenteditable','true');
+      $('button.edit').text('Done');
+      }
       });
 
 })
