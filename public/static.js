@@ -1,15 +1,17 @@
 $(document).ready(function(){
     // Connect to our node/websockets server
-    var socket = io.connect('http://localhost:8080');
-
+    var socket = io.connect('http://soiltest:8080');
+    // var startTime;
     $('button.json').click(function(event) {
       var format='JSON';
       var sql=$('#query').val();
-      var t0 = performance.now();
+      startTime = Date.now();
       socket.emit('query',sql,format);
 
       socket.on('create table JSON', function(data){
          //console.log(data);
+        //  latency = Date.now() - startTime;
+        //  console.log(latency);
          data=JSON.parse(data);
         var s = '<table>',
     flds = Object.keys(data[0]);
@@ -30,17 +32,14 @@ $(document).ready(function(){
 
   s += '</table>';
   $('#data').html(s);
-  var t1 = performance.now();
-  console.log(format+ ' took ' + (t1 - t0) + ' milliseconds.')
+
   })//create table JSON
 }); //button.json click
 
 $('button.text').click(function(event) {
   var format='text';
   var sql=$('#query').val();
-  var t0 = performance.now();
   socket.emit('query',sql,format);
-
 
   socket.on('create table text', function(data){
 
@@ -53,23 +52,18 @@ $('button.text').click(function(event) {
     rows.shift();
     s += '<tr><td>' + rows.join('<tr><td>').replace(/\|/g, '<td>');
     $('#data').html(s);
-    var t1 = performance.now();
-    console.log(format+ ' took ' + (t1 - t0) + ' milliseconds.')
+
   })//create table text
 }); //button.text click
 
   $('button.table').click(function(event) {
     var format='table';
     var sql=$('#query').val();
-    var t0 = performance.now();
     socket.emit('query',sql,format);
-
 
     socket.on('create table table', function(data){
     //  $('button.table').text('table: ' + out.responseText.length + ' bytes');
       $('#data').html(data);
-      var t1 = performance.now();
-      console.log(format+ ' took ' + (t1 - t0) + ' milliseconds.')
     })//create table table
   }); //button.table click
 
@@ -107,5 +101,9 @@ $('button.text').click(function(event) {
       $('button').removeClass('selected');
       $(this).addClass('selected');
     });
+
+    $('button.edit').click(function(event) {
+      $('td').attr('contenteditable','true');
+      });
 
 })

@@ -5,7 +5,6 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     path = require('path'),
     moment = require('moment'),
-    tableify = require('tableify'),
     tableName,
     connection;
     var io = require('socket.io').listen(8080);
