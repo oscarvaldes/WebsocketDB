@@ -105,6 +105,19 @@ $('button.text').click(function(event) {
     $('button.edit').click(function(event) {
 
       if($('button.edit').text()==='Done'){
+        //send update request
+        var format='text';
+        var tableName=$('#query').val();
+        var matches = /from (.*?) /g.exec(tableName);
+        if(matches.length > 1) {
+          var price = matches[1];
+          console.log(price);
+        }
+        else {
+          // Not found
+        }
+        // var sql='';
+        // socket.emit('update',sql,format);
         $('td').attr('contenteditable','false');
         $('button.edit').text('edit table');
       }
