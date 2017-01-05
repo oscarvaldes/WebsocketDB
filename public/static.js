@@ -73,30 +73,6 @@ $('button.text').click(function(event) {
       //  console.log("TESTINGGGG");
     })
 
-    $(document).keydown(function(e) {
-      var delta;
-
-      if(e.which === 34) {         //PGDN
-        delta = 30;
-      } else if(e.which === 33) {  //PGUP
-        delta = -30;
-      } else if(e.which === 40) {  //down
-        delta = 1;
-      } else if(e.which === 38) {  //up
-        delta = -1;
-      }
-
-      if(delta) {
-        $('#query').val(function(_, val) {
-          var sp = val.split('offset '),
-              ofs = +sp[1] + delta;
-
-          return sp[0] + 'offset ' + ofs;
-        });
-        $('button.selected').click();
-      }
-    });
-
     $('button').click(function() {
       $('button').removeClass('selected');
       $(this).addClass('selected');
@@ -110,13 +86,18 @@ $('button.text').click(function(event) {
         var tableName=$('#query').val();
         var matches = /from (.*?) /g.exec(tableName);
         if(matches.length > 1) {
-          var price = matches[1];
-          console.log(price);
+          var name = matches[1];
+          console.log($(this).text());  //do whatever you want with the text
+          console.log($(this).attr('Lab'));
+          console.log($(this).attr('State'));
+          //console.log(name);
         }
         else {
           // Not found
         }
-        // var sql='';
+
+        var sql='UPDATE '+name;
+        console.log(sql);
         // socket.emit('update',sql,format);
         $('td').attr('contenteditable','false');
         $('button.edit').text('edit table');
@@ -125,6 +106,34 @@ $('button.text').click(function(event) {
       $('td').attr('contenteditable','true');
       $('button.edit').text('Done');
       }
+      });
+
+      $(document).keydown(function(e) {
+        var delta;
+
+        if(e.which === 34) {         //PGDN
+          delta = 30;
+        } else if(e.which === 33) {  //PGUP
+          delta = -30;
+        } else if(e.which === 40) {  //down
+          delta = 1;
+        } else if(e.which === 38) {  //up
+          delta = -1;
+        }
+
+        if(delta) {
+          $('#query').val(function(_, val) {
+            var sp = val.split('offset '),
+                ofs = +sp[1] + delta;
+
+            return sp[0] + 'offset ' + ofs;
+          });
+          //create case for edit button
+          if($('button.edit').hasClass('selected')){
+            $('button.text').click();
+          }
+          $('button.selected').click();
+        }
       });
 
 })
