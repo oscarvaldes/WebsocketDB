@@ -115,7 +115,7 @@ $('button.text').click(function(event) {
       //console.log(statement);
       $('.edit').click(function(){
       var th = $('#data th').eq($(this).index());// returns text of respective header
-      var value = $(this).html();
+      var value = $(this).text();
       statement='UPDATE '+name+' SET '+th.text()+'='+value;
       //console.log(statement);
       //console.log(th.text());
