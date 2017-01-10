@@ -1,11 +1,13 @@
 $(document).ready(function(){
     // Connect to our node/websockets server
     var socket = io.connect('http://soiltest:8080');
+    var statement;
     // var startTime;
     $('button.json').click(function(event) {
+      $('button.editTable').text('edit table');
       var format='JSON';
       var sql=$('#query').val();
-      startTime = Date.now();
+      //startTime = Date.now();
       socket.emit('query',sql,format);
 
       socket.on('create table JSON', function(data){
@@ -37,6 +39,7 @@ $(document).ready(function(){
 }); //button.json click
 
 $('button.text').click(function(event) {
+  $('button.editTable').text('edit table');
   var format='text';
   var sql=$('#query').val();
   socket.emit('query',sql,format);
@@ -57,6 +60,7 @@ $('button.text').click(function(event) {
 }); //button.text click
 
   $('button.table').click(function(event) {
+    $('button.editTable').text('edit table');
     var format='table';
     var sql=$('#query').val();
     socket.emit('query',sql,format);
@@ -78,34 +82,46 @@ $('button.text').click(function(event) {
       $(this).addClass('selected');
     });
 
-    $('button.edit').click(function(event) {
+    $('button.editTable').click(function(event) {
 
-      if($('button.edit').text()==='Done'){
         //send update request
-        var format='text';
-        var tableName=$('#query').val();
-        var matches = /from (.*?) /g.exec(tableName);
-        if(matches.length > 1) {
-          var name = matches[1];
-          console.log($(this).text());  //do whatever you want with the text
-          console.log($(this).attr('Lab'));
-          console.log($(this).attr('State'));
-          //console.log(name);
-        }
-        else {
-          // Not found
-        }
-
-        var sql='UPDATE '+name;
-        console.log(sql);
+      if($('button.editTable').text()==='Done'){
+        console.log(statement);
         // socket.emit('update',sql,format);
+        statement='';
         $('td').attr('contenteditable','false');
-        $('button.edit').text('edit table');
+        $( 'td' ).removeClass( 'edit' );
+        $('button.editTable').text('edit table');
       }
       else{
-      $('td').attr('contenteditable','true');
-      $('button.edit').text('Done');
+
+      var format='text';
+      var tableName=$('#query').val();
+      var matches = /from (.*?) /g.exec(tableName);
+      if(matches.length > 1) {
+        var name = matches[1];
+        //  console.log($(this).text());  //do whatever you want with the text DONE
       }
+      else {
+        console.log('There is an error in your SQL statement');
+        // Not Found
+      }
+
+      $('td').attr('contenteditable','true');
+      $( 'td' ).addClass( 'edit' );
+      $('button.editTable').text('Done');
+
+      //statement='UPDATE '+name;
+      //console.log(statement);
+      $('.edit').click(function(){
+      var th = $('#data th').eq($(this).index());// returns text of respective header
+      var value = $(this).html();
+      statement='UPDATE '+name+' SET '+th.text()+'='+value;
+      //console.log(statement);
+      //console.log(th.text());
+      });
+      }
+
       });
 
       $(document).keydown(function(e) {
@@ -129,11 +145,13 @@ $('button.text').click(function(event) {
             return sp[0] + 'offset ' + ofs;
           });
           //create case for edit button
-          if($('button.edit').hasClass('selected')){
+          if($('button.editTable').hasClass('selected')){
             $('button.text').click();
           }
+          else{
           $('button.selected').click();
+        }
         }
       });
 
-})
+});
