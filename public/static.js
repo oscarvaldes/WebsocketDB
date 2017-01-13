@@ -1,7 +1,17 @@
 $(document).ready(function(){
     // Connect to our node/websockets server
-    var socket = io.connect('http://soiltest:8080');
+    var socket = io.connect('http://localhost:8080');
     var statement;
+    var primaryKey;
+    var answer=0;
+    var condition;
+
+    function update(callback) {
+      // var id = $(this).closest('tr').find('td:eq(1)').text();
+      // console.log(id);
+
+      callback();
+}//end of update
     // var startTime;
     $('button.json').click(function(event) {
       $('button.editTable').text('edit table');
@@ -86,6 +96,7 @@ $('button.text').click(function(event) {
 
         //send update request
       if($('button.editTable').text()==='Done'){
+        statement+=condition;
         console.log(statement);
         // socket.emit('update',sql,format);
         statement='';
@@ -94,48 +105,66 @@ $('button.text').click(function(event) {
         $('button.editTable').text('edit table');
       }
       else{
+        $('td').attr('contenteditable','true');
+        $( 'td' ).addClass( 'edit' );
+        $('button.editTable').text('Done');
 
-      var format='text';
-      var tableName=$('#query').val();
-      var matches = /from (.*?) /g.exec(tableName);
-      var value;
-      if(matches.length > 1) {
-        var name = matches[1];
-        //  console.log($(this).text());  //do whatever you want with the text DONE
-      }
-      else {
-        console.log('There is an error in your SQL statement');
-        // Not Found
-      }
+        $('.edit').click(function(){
+        update(function() {
+          var format='text';
+          var tableName=$('#query').val();
+          var matches = /from (.*?) /g.exec(tableName);
+          var value;
+          if(matches.length > 1) {
+            var name = matches[1];
+            //  console.log($(this).text());  //do whatever you want with the text DONE
+          }
+          else {
+            console.log('There is an error in your SQL statement');
+            // Not Found
+          }
 
-      $('td').attr('contenteditable','true');
-      $( 'td' ).addClass( 'edit' );
-      $('button.editTable').text('Done');
-
-      //statement='UPDATE '+name;
-      //console.log(statement);
-      $('.edit').click(function(){
-      var th = $('#data th').eq($(this).index());// returns text of respective header
-      //var resultArray = $(this).closest('tr').find('td').text();
-      var value = $(this).closest('tr').find('td:eq(1)').text();
-      console.log(value);
-      if($(this).find('td').eq(1).text() == 'Lab'){
-           $(this).css('background','red');
-       }
-      //console.log(resultArray);
-      //var value = $(this).text();
-      socket.emit('primary',name);
-      socket.on('key', function(key){
-
-        $('.edit').on('input', function() {
-          value = $(this).text();
-          statement='UPDATE '+name+' SET '+th.text()+'='+value+' WHERE '+key+'=';
+          //statement='UPDATE '+name;
           //console.log(statement);
-        });
-      })
 
-      });
-      }
+          var th = $('#data th').eq($(this).index());// returns text of respective header
+          //var resultArray = $(this).closest('tr').find('td').text();
+          socket.emit('primary',name);
+          socket.on('key', function(key){
+            primaryKey=key;
+            $('.edit').on('input', function() {
+              value = $(this).text();
+              statement='UPDATE '+name+' SET '+th.text()+'='+value+' WHERE '+primaryKey+'= ';
+              //need to find column primaryKey eq
+              //console.log(statement);
+            });
+
+            var iterate=0;
+
+            var str;
+            $('#data th').each(function() {
+              //console.log($(this).text());
+              if($(this).text()===primaryKey){
+                //console.log(primaryKey);
+                answer=iterate;
+                //console.log(answer);
+                //str = iterate.toString();
+              }
+              iterate=iterate+1;
+            })
+            iterate=0;
+
+          })
+          // var id = $(this).closest('tr').find('td:eq(1)').text();
+          // console.log(id);
+          //console.log(primaryKey);
+
+          });
+          var id = $(this).closest('tr').find('td:eq(1)').text();
+          condition=id;
+          //console.log(condition);
+        });
+    }//tohere
 
       });
 
