@@ -98,6 +98,7 @@ $('button.text').click(function(event) {
       var format='text';
       var tableName=$('#query').val();
       var matches = /from (.*?) /g.exec(tableName);
+      var value;
       if(matches.length > 1) {
         var name = matches[1];
         //  console.log($(this).text());  //do whatever you want with the text DONE
@@ -115,10 +116,24 @@ $('button.text').click(function(event) {
       //console.log(statement);
       $('.edit').click(function(){
       var th = $('#data th').eq($(this).index());// returns text of respective header
-      var value = $(this).text();
-      statement='UPDATE '+name+' SET '+th.text()+'='+value;
-      //console.log(statement);
-      //console.log(th.text());
+      //var resultArray = $(this).closest('tr').find('td').text();
+      var value = $(this).closest('tr').find('td:eq(1)').text();
+      console.log(value);
+      if($(this).find('td').eq(1).text() == 'Lab'){
+           $(this).css('background','red');
+       }
+      //console.log(resultArray);
+      //var value = $(this).text();
+      socket.emit('primary',name);
+      socket.on('key', function(key){
+
+        $('.edit').on('input', function() {
+          value = $(this).text();
+          statement='UPDATE '+name+' SET '+th.text()+'='+value+' WHERE '+key+'=';
+          //console.log(statement);
+        });
+      })
+
       });
       }
 

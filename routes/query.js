@@ -135,6 +135,16 @@ io.sockets.on('connection', function(socket){
       });//query
     })
 
+    socket.on('primary',function(tableName){
+      db.query("SHOW INDEX FROM `agdbmysql`."+tableName+" WHERE `Key_name` = 'PRIMARY';", function(err, rows, fields) {
+      var key = rows[0].Column_name;
+      socket.emit('key',key);
+
+        //console.log(rows);
+      });
+
+    })
+
         // Initial app start, run db query
 
 })//connection
