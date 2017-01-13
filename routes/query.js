@@ -145,6 +145,14 @@ io.sockets.on('connection', function(socket){
 
     })
 
+    socket.on('update',function(statement){
+      console.log(statement);
+      db.query(statement, function(err, rows, fields) {
+
+      });
+
+      })
+
         // Initial app start, run db query
 
 })//connection
