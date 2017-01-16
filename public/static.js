@@ -136,8 +136,8 @@ $('button.text').click(function(event) {
             $('.edit').on('input', function() {
               var th = $('#data th').eq($(this).index());// returns text of respective header
               //console.log(th.text());
-              value = $(this).text();
-              if(value===''){
+              value = "'"+$(this).text()+"'";
+              if(value==="''"){
                 value='NULL';
               }
               //console.log(value);
