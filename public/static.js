@@ -98,7 +98,7 @@ $('button.text').click(function(event) {
       if($('button.editTable').text()==='Done'){
         statement+=condition;
         console.log(statement);
-        //socket.emit('update',statement);
+        socket.emit('update',statement);
         statement='';
         $('td').attr('contenteditable','false');
         $( 'td' ).removeClass( 'edit' );
@@ -127,14 +127,20 @@ $('button.text').click(function(event) {
           //statement='UPDATE '+name;
           //console.log(statement);
 
-          var th = $('#data th').eq($(this).index());// returns text of respective header
-          console.log(th.text());
+
+
           //var resultArray = $(this).closest('tr').find('td').text();
           socket.emit('primary',name);
           socket.on('key', function(key){
             primaryKey=key;
             $('.edit').on('input', function() {
+              var th = $('#data th').eq($(this).index());// returns text of respective header
+              //console.log(th.text());
               value = $(this).text();
+              if(value===''){
+                value='NULL';
+              }
+              //console.log(value);
               statement='UPDATE '+name+' SET '+th.text()+'='+value+' WHERE '+primaryKey+'= ';
 
               //need to find column primaryKey eq
@@ -147,7 +153,7 @@ $('button.text').click(function(event) {
             $('#data th').each(function() {
               //console.log($(this).text());
               if($(this).text()===primaryKey){
-                console.log(primaryKey);
+                //console.log(primaryKey);
                 answer=iterate;
                 //console.log(answer);
                 //str = iterate.toString();
