@@ -1,14 +1,16 @@
 $(document).ready(function(){
     // Connect to our node/websockets server
-    var socket = io.connect('http://localhost:8080');
+    var socket = io.connect('http://soiltest:8080');
     var statement;
     var primaryKey;
     var answer=0;
     var condition;
+    var changes = [];
 
     function update(callback) {
       // var id = $(this).closest('tr').find('td:eq(1)').text();
       // console.log(id);
+
 
       callback();
 }//end of update
@@ -96,8 +98,14 @@ $('button.text').click(function(event) {
 
         //send update request
       if($('button.editTable').text()==='Done'){
-        statement+=condition;
-        console.log(statement);
+        //console.log($('.updated').data('sql'));
+        changes.push($('.updated').attr('sql'));
+        console.log(changes.toString());
+        $('.updated').css("background-color","white");
+        // $('.updated').removeAttr( 'sql' );
+        // $('.updated').removeClass( 'updated' );
+        //statement+=condition;
+        //console.log(statement);
         socket.emit('update',statement);
         statement='';
         $('td').attr('contenteditable','false');
@@ -134,6 +142,8 @@ $('button.text').click(function(event) {
           socket.on('key', function(key){
             primaryKey=key;
             $('.edit').on('input', function() {
+              $(this).css('background-color','orange');
+              $(this).addClass('updated');
               var th = $('#data th').eq($(this).index());// returns text of respective header
               //console.log(th.text());
               value = "'"+$(this).text()+"'";
@@ -141,36 +151,20 @@ $('button.text').click(function(event) {
                 value='NULL';
               }
               //console.log(value);
-              statement='UPDATE '+name+' SET '+th.text()+'='+value+' WHERE '+primaryKey+'= ';
+              var id = $(this).closest('tr').find('td:eq(1)').text();
+              condition=id;
+              statement='UPDATE '+name+' SET '+th.text()+'='+value+' WHERE '+primaryKey+'= '+condition;
+              //$(this).attr('sql', "'"+statement+"'");
+              $(this).attr( 'sql',statement );
+              // changes.push(statement);
+              // console.log(changes.toString());
 
-              //need to find column primaryKey eq
-              //console.log(statement);
             });
 
-            var iterate=0;
-
-            var str;
-            $('#data th').each(function() {
-              //console.log($(this).text());
-              if($(this).text()===primaryKey){
-                //console.log(primaryKey);
-                answer=iterate;
-                //console.log(answer);
-                //str = iterate.toString();
-              }
-              iterate=iterate+1;
-            })
-            iterate=0;
-
           })
-          // var id = $(this).closest('tr').find('td:eq(1)').text();
-          // console.log(id);
-          //console.log(primaryKey);
 
           });
-          var id = $(this).closest('tr').find('td:eq(1)').text();
-          condition=id;
-          //console.log(condition);
+
         });
     }//tohere
 
