@@ -102,12 +102,16 @@ function json(rows, fields) {
 var notes = []
 var initialNotes = false
 var socketCount = 0
+var addresses= [];
 
 io.sockets.on('connection', function(socket){
     // Socket has connected, increase socket count
     socketCount++
+    //console.log(socket.handshake.address);
+    addresses.push(socket.handshake.address);
     // Let all sockets know how many are connected
-    io.sockets.emit('users connected', socketCount)
+    //io.sockets.emit('users connected', socketCount)
+    io.sockets.emit('users connected', addresses)
 
     socket.on('disconnect', function() {
         // Decrease the socket count on a disconnect, emit

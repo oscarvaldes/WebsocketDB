@@ -85,8 +85,10 @@ $('button.text').click(function(event) {
 
     // New socket connected, display new count on page
     socket.on('users connected', function(data){
-        $('#usersConnected').html('Users connected: ' + data)
-      //  console.log("TESTINGGGG");
+        data.forEach(function(address){
+          $('#usersConnected').html('Users connected:' + data)
+        });
+
     })
 
     $('button').click(function() {
