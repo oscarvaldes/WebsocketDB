@@ -1,6 +1,6 @@
 $(document).ready(function(){
     // Connect to our node/websockets server
-    var socket = io.connect('http://soiltest:8080');
+    var socket = io.connect('http://localhost:8080');
     var statement;
     var primaryKey;
     var answer=0;
@@ -106,11 +106,7 @@ $('button.text').click(function(event) {
           $(this).removeClass('updated');
 
         });
-        console.log(changes.toString());
-        // $('.updated').removeAttr( 'sql' );
-        // $('.updated').removeClass( 'updated' );
-        //statement+=condition;
-        //console.log(statement);
+        //console.log(changes.toString());
         socket.emit('update',changes);
         changes=[];
         statement='';
@@ -138,12 +134,6 @@ $('button.text').click(function(event) {
             // Not Found
           }
 
-          //statement='UPDATE '+name;
-          //console.log(statement);
-
-
-
-          //var resultArray = $(this).closest('tr').find('td').text();
           socket.emit('primary',name);
           socket.on('key', function(key){
             primaryKey=key;
@@ -160,10 +150,7 @@ $('button.text').click(function(event) {
               var id = $(this).closest('tr').find('td:eq(1)').text();
               condition=id;
               statement='UPDATE '+name+' SET '+th.text()+'='+value+' WHERE '+primaryKey+'= '+condition;
-              //$(this).attr('sql', "'"+statement+"'");
               $(this).attr( 'sql',statement );
-              // changes.push(statement);
-              // console.log(changes.toString());
 
             });
 
@@ -176,6 +163,38 @@ $('button.text').click(function(event) {
 
       });
 
+      $('.entireTable').click(function(){
+        var format='text';
+        var tableName=$('#query').val();
+        var matches = /from (.*?) /g.exec(tableName);
+        var value;
+        if(matches.length > 1) {
+          var name = matches[1];
+          //  console.log($(this).text());  //do whatever you want with the text DONE
+        }
+        else {
+          console.log('There is an error in your SQL statement');
+          // Not Found
+        }
+        sql='select * from '+name;
+        console.log(sql);
+        socket.emit('query',sql,format);
+        socket.on('create table text', function(data){
+
+          var rows = data.split('\n'),
+              s = '<table>';
+
+        //  $('button.text').text('text: ' + out.responseText.length + ' bytes');
+
+          s += '<tr><th>' + rows[0].replace(/\|/g, '<th>');
+          rows.shift();
+          s += '<tr><td>' + rows.join('<tr><td>').replace(/\|/g, '<td>');
+          $('#data').html(s);
+
+        })//create table text
+
+      });
+
       $(document).keydown(function(e) {
         var delta;
 
@@ -184,9 +203,9 @@ $('button.text').click(function(event) {
         } else if(e.which === 33) {  //PGUP
           delta = -30;
         } else if(e.which === 40) {  //down
-          delta = 1;
+          delta = 5;
         } else if(e.which === 38) {  //up
-          delta = -1;
+          delta = -5;
         }
 
         if(delta) {

@@ -16,10 +16,10 @@ router.use(bodyParser.urlencoded({
 
 // Define our db creds
 var db = mysql.createConnection({
-  host: 'soiltest',
+  host: 'localhost',
   user: 'root',
   password: 'Blue$apph1re#2',
-  database: 'agdbmysql'
+  database: 'agdb'
 })
 
 // Log any errors connected to the db
@@ -136,7 +136,7 @@ io.sockets.on('connection', function(socket){
     })
 
     socket.on('primary',function(tableName){
-      db.query("SHOW INDEX FROM `agdbmysql`."+tableName+" WHERE `Key_name` = 'PRIMARY';", function(err, rows, fields) {
+      db.query("SHOW INDEX FROM `agdb`."+tableName+" WHERE `Key_name` = 'PRIMARY';", function(err, rows, fields) {
       var key = rows[0].Column_name;
       socket.emit('key',key);
 
@@ -146,12 +146,13 @@ io.sockets.on('connection', function(socket){
 
     socket.on('update',function(changes){
     //  console.log(statement);
-    myArray.forEach(function(value){
-      console.log(value);
-      });
+      changes.forEach(function(statement){
+      //console.log(value);
       db.query(statement, function(err, rows, fields) {
+      });
 
       });
+
 
       })
 
