@@ -144,8 +144,11 @@ io.sockets.on('connection', function(socket){
 
     })
 
-    socket.on('update',function(statement){
+    socket.on('update',function(changes){
     //  console.log(statement);
+    myArray.forEach(function(value){
+      console.log(value);
+      });
       db.query(statement, function(err, rows, fields) {
 
       });
