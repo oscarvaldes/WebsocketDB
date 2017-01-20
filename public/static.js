@@ -99,9 +99,17 @@ $('button.text').click(function(event) {
         //send update request
       if($('button.editTable').text()==='Done'){
         //console.log($('.updated').data('sql'));
-        changes.push($('.updated').attr('sql'));
+        //changes.push($('.updated').attr('sql'));
+        //console.log(changes.toString());
+        //console.log(changes);
+        $('.updated').each(function(){
+          changes.push($(this).attr('sql'));
+          $(this).removeAttr('sql');
+          $(this).css("background-color","white");
+          $(this).removeClass('updated');
+
+        });
         console.log(changes.toString());
-        $('.updated').css("background-color","white");
         // $('.updated').removeAttr( 'sql' );
         // $('.updated').removeClass( 'updated' );
         //statement+=condition;
