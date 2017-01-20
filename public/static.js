@@ -98,14 +98,11 @@ $('button.text').click(function(event) {
 
         //send update request
       if($('button.editTable').text()==='Done'){
-        //console.log($('.updated').data('sql'));
-        //changes.push($('.updated').attr('sql'));
-        //console.log(changes.toString());
-        //console.log(changes);
+
         $('.updated').each(function(){
           changes.push($(this).attr('sql'));
           $(this).removeAttr('sql');
-          $(this).css("background-color","white");
+          $(this).removeAttr('style');
           $(this).removeClass('updated');
 
         });
