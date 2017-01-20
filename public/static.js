@@ -111,7 +111,8 @@ $('button.text').click(function(event) {
         // $('.updated').removeClass( 'updated' );
         //statement+=condition;
         //console.log(statement);
-        socket.emit('update',statement);
+        socket.emit('update',changes);
+        changes=[];
         statement='';
         $('td').attr('contenteditable','false');
         $( 'td' ).removeClass( 'edit' );
