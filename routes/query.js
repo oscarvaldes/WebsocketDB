@@ -16,10 +16,10 @@ router.use(bodyParser.urlencoded({
 
 // Define our db creds
 var db = mysql.createConnection({
-  host: 'localhost',
+  host: 'soiltest',
   user: 'root',
   password: 'Blue$apph1re#2',
-  database: 'agdb'
+  database: 'agdbmysql'
 })
 
 // Log any errors connected to the db
@@ -107,6 +107,7 @@ var addresses= [];
 io.sockets.on('connection', function(socket){
     // Socket has connected, increase socket count
     socketCount++
+    addresses.length=socketCount;
     //console.log(socket.handshake.address);
     addresses.push(socket.handshake.address);
     // Let all sockets know how many are connected
@@ -116,7 +117,8 @@ io.sockets.on('connection', function(socket){
     socket.on('disconnect', function() {
         // Decrease the socket count on a disconnect, emit
         socketCount--
-        io.sockets.emit('users connected', socketCount)
+        addresses.length=socketCount+1;
+        io.sockets.emit('users connected', addresses)
     })
 
     socket.on('query',function(sql,format){
@@ -140,7 +142,7 @@ io.sockets.on('connection', function(socket){
     })
 
     socket.on('primary',function(tableName){
-      db.query("SHOW INDEX FROM `agdb`."+tableName+" WHERE `Key_name` = 'PRIMARY';", function(err, rows, fields) {
+      db.query("SHOW INDEX FROM `agdbmysql`."+tableName+" WHERE `Key_name` = 'PRIMARY';", function(err, rows, fields) {
       var key = rows[0].Column_name;
       socket.emit('key',key);
 

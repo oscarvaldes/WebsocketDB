@@ -1,6 +1,6 @@
 $(document).ready(function(){
     // Connect to our node/websockets server
-    var socket = io.connect('http://localhost:8080');
+    var socket = io.connect('http://soiltest:8080');
     var statement;
     var primaryKey;
     var answer=0;
@@ -85,9 +85,19 @@ $('button.text').click(function(event) {
 
     // New socket connected, display new count on page
     socket.on('users connected', function(data){
-        data.forEach(function(address){
-          $('#usersConnected').html('Users connected:' + data)
+        var newstring;
+        var output;
+        var addresses=[];
+        $.each( data, function( key, value ) {
+
+          if(value!=null){
+            newstring=value.toString();
+            output=newstring.replace(/::ffff:/g,'');
+            addresses.push(output);
+        }
         });
+         $('#usersConnected').html('Users connected:' + addresses)
+        // });
 
     })
 
