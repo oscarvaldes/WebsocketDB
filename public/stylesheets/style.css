@@ -16,6 +16,13 @@ td, th {
   border-bottom: 1px solid #bbb;
   white-space: nowrap;
 }
+tr:nth-child(even) {
+    background-color: #bbb;
+}
+#data{
+  height: 500px;
+  overflow: auto;
+}
 
 #query {
   width: 40em;
