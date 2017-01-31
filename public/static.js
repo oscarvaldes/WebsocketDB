@@ -186,7 +186,7 @@ $('button.text').click(function(event) {
           // Not Found
         }
         sql='select * from '+name;
-        console.log(sql);
+        //console.log(sql);
         socket.emit('query',sql,format);
         socket.on('create table text', function(data){
 
