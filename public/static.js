@@ -8,9 +8,6 @@ $(document).ready(function(){
     var changes = [];
 
     function update(callback) {
-      // var id = $(this).closest('tr').find('td:eq(1)').text();
-      // console.log(id);
-
 
       callback();
 }//end of update
@@ -207,6 +204,38 @@ $('button.text').click(function(event) {
 
       });
 
+//FILTER CODE
+          var iteration=0;
+          $('#inputfilter').show();
+          $('#inputfilter').keyup(function(){
+          filter = new RegExp($(this).val(),'i');
+          $('#data tr').filter(function(){
+            $(this).each(function(){
+              found = false;
+              $(this).children().each(function(){
+                content = $(this).html();
+                if(content.match(filter))
+                {
+                  found = true
+                }
+              });
+              if(!found)
+              {
+                if($(this).children().prop('tagName')==='TH'){
+                  //do nothing
+                }
+                else{
+                $(this).hide();
+              }
+              }
+              else
+              {
+                $(this).show();
+              }
+            });
+          });
+        });
+//END OF FILTER
       $(document).keydown(function(e) {
         var delta;
 
@@ -235,6 +264,7 @@ $('button.text').click(function(event) {
           $('button.selected').click();
         }
         }
+
       });
 
 });

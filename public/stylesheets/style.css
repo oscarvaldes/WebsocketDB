@@ -31,3 +31,6 @@ tr:nth-child(even) {
 button.selected {
   background: #bfb;
 }
+.edit:hover{
+background-color: orange;
+}
