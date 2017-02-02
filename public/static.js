@@ -248,6 +248,7 @@ $('button.text').click(function(event) {
           });
         });
 //END OF FILTER
+
       $(document).keydown(function(e) {
         var delta;
 

@@ -17,7 +17,7 @@ td, th {
   white-space: nowrap;
 }
 tr:nth-child(even) {
-    background-color: #bbb;
+  background-color: #f4f4f4;
 }
 #data{
   height: 500px;
@@ -31,6 +31,12 @@ tr:nth-child(even) {
 button.selected {
   background: #bfb;
 }
+
 .edit:hover{
-background-color: orange;
+  background-color: orange;
 }
+
+tr:hover {
+  outline: 1px solid black;
+}
+
