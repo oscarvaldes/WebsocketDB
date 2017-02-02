@@ -106,7 +106,7 @@ $('button.text').click(function(event) {
     $('button.editTable').click(function(event) {
 
         //send update request
-      if($('button.editTable').text()==='Done'){
+      if($('button.editTable').text()==='Save'){
 
         $('.updated').each(function(){
           changes.push($(this).attr('sql'));
@@ -126,7 +126,7 @@ $('button.text').click(function(event) {
       else{
         $('td').attr('contenteditable','true');
         $( 'td' ).addClass( 'edit' );
-        $('button.editTable').text('Done');
+        $('button.editTable').text('Save');
 
         $('.edit').click(function(){
         update(function() {
@@ -136,7 +136,7 @@ $('button.text').click(function(event) {
           var value;
           if(matches.length > 1) {
             var name = matches[1];
-            //  console.log($(this).text());  //do whatever you want with the text DONE
+            //  console.log($(this).text());  //do whatever you want with the text Save
           }
           else {
             console.log('There is an error in your SQL statement');
@@ -179,7 +179,7 @@ $('button.text').click(function(event) {
         var value;
         if(matches.length > 1) {
           var name = matches[1];
-          //  console.log($(this).text());  //do whatever you want with the text DONE
+
         }
         else {
           console.log('There is an error in your SQL statement');
@@ -220,7 +220,7 @@ $('button.text').click(function(event) {
                   }
                   else if(content.match(filter)){
                   found = true
-                  $(this).css("background-color","yellow");
+                  $(this).css('background-color','yellow');
                   // console.log($(this).text());
                 }
               //  }
