@@ -206,7 +206,6 @@ $('button.text').click(function(event) {
 
 //FILTER CODE
           var iteration=0;
-          $('#inputfilter').show();
           $('#inputfilter').keyup(function(){
           filter = new RegExp($(this).val(),'i');
           $('#data tr').filter(function(){
@@ -214,15 +213,28 @@ $('button.text').click(function(event) {
               found = false;
               $(this).children().each(function(){
                 content = $(this).html();
-                if(content.match(filter))
-                {
+                // if(content.match(filter))
+                // {
+                  if(filter.toString()==='/(?:)/i'){
+                    $(this).removeAttr('style');
+                  }
+                  else if(content.match(filter)){
                   found = true
+                  $(this).css("background-color","yellow");
+                  // console.log($(this).text());
+                }
+              //  }
+                else{
+                  $(this).removeAttr('style');
                 }
               });
               if(!found)
               {
                 if($(this).children().prop('tagName')==='TH'){
                   //do nothing
+                }
+                else if(filter.toString()==='/(?:)/i'){
+                  $(this).show();
                 }
                 else{
                 $(this).hide();
