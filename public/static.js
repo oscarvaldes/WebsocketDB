@@ -209,16 +209,22 @@ $('button.text').click(function(event) {
           var RE = new RegExp($(this).val(), 'i');
 
           $('#data tr:gt(0)').hide();
-          if($('#data tr').filter(RE).show()){
-            $('td').each(function() {
-              if($(this).html().match(RE)){
-              $(this).css('background-color','yellow');
-            }
-            else{
-              $(this).removeAttr('style');
-            }
-            });
+          $('#data tr').filter(RE).show();
+          $('#data td').removeClass('highlight');
+          if($(this).val()) {
+            $('#data td').filter(RE).addClass('highlight');
           }
+          return;
+          // if($('#data tr').filter(RE).show()){
+          //   $('td').each(function() {
+          //     if($(this).html().match(RE)){
+          //     $(this).css('background-color','yellow');
+          //   }
+          //   else{
+          //     $(this).removeAttr('style');
+          //   }
+          //   });
+          // }
         });
         //   var iteration=0;
         //   $('#inputfilter').keyup(function(){

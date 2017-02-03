@@ -40,3 +40,6 @@ tr:hover {
   outline: 1px solid black;
 }
 
+.highlight {
+  background: yellow;
+}
