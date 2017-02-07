@@ -162,6 +162,12 @@ io.sockets.on('connection', function(socket){
 
       })
 
+      socket.on('load',function(){
+        db.query("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA='agdbmysql' ", function(err, rows, fields) {
+          socket.emit('tables',rows);
+        });
+        })
+
         // Initial app start, run db query
 
 })//connection

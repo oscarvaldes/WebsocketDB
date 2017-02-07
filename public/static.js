@@ -11,7 +11,16 @@ $(document).ready(function(){
 
       callback();
 }//end of update
-    // var startTime;
+    socket.emit('load');
+    socket.on('tables', function(rows){
+      $.each(rows, function(key, value){
+          $.each(value, function(key, value){
+              //console.log(value);
+              var button= $('<button class="tables">'+value+'</button>');
+              $('#database').append(button);
+          });
+      });
+    })
     $('button.json').click(function(event) {
       $('button.editTable').text('edit table');
       var format='JSON';
@@ -20,9 +29,6 @@ $(document).ready(function(){
       socket.emit('query',sql,format);
 
       socket.on('create table JSON', function(data){
-         //console.log(data);
-        //  latency = Date.now() - startTime;
-        //  console.log(latency);
          data=JSON.parse(data);
         var s = '<table>',
     flds = Object.keys(data[0]);
@@ -79,6 +85,37 @@ $('button.text').click(function(event) {
       $('#data').html(data);
     })//create table table
   }); //button.table click
+
+  $(document).on('click', 'button.tables', function(event) {
+    //console.log($(this).text());
+    var format='JSON';
+    var sql='select * from '+ $(this).text() + ' limit 200 offset 0';
+    $('#query').val(sql);
+    socket.emit('query',sql,format);
+    socket.on('create table JSON', function(data){
+       data=JSON.parse(data);
+      var s = '<table>',
+  flds = Object.keys(data[0]);
+
+    //   $('button.json').text('json: ' + out.responseText.length + ' bytes');
+
+      s += '<tr>';
+      flds.forEach(function(fld) {
+        s += '<th>' + fld;
+    });
+
+      data.forEach(function(row) {
+      s += '<tr>';
+      flds.forEach(function(fld) {
+        s += '<td>' + row[fld];
+      });
+    });
+
+    s += '</table>';
+    $('#data').html(s);
+
+    })//create table JSON
+  });
 
     // New socket connected, display new count on page
     socket.on('users connected', function(data){
