@@ -82,7 +82,7 @@ $(function() {
     res = sql.replace(matches[1], $(this).text());
     sql = res;
     $('#query').val(sql);
-    
+
     // $('button').removeClass('selected');
     // $(this).addClass('selected');
     socket.emit('query', sql, format);
@@ -122,7 +122,7 @@ $(function() {
         addresses.push(output);
       }
     });
-    $('#usersConnected').html('Users connected:' + addresses)
+    $('#usersConnected').html('Users Connected:' + addresses)
     // });
 
   })
