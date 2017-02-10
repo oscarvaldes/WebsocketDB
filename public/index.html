@@ -9,17 +9,22 @@
 <script src="/static.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
-<div class="container">
-<div id="info">
+<div class="jumbotron">
+  <div id="info">
   <input type="text" placeholder="Enter Table Name" id="query" autofocus value="select * from mytest limit 200 offset 0"><br>
+  <div id="usersConnected"></div>
+  </div>
+</div>
+<div class="container">
   <button class="json">json</button>
   <button class="text">text</button>
   <button class="tableb">table</button>
   <button class="editTable">edit table</button>
-  <button class="entireTable">show entire table</button>
+  <button class="entireTable">display entire table</button>
   <button id="excel">export to excel</button>
   <input type="text" placeholder="Filter Table" id="inputfilter" autofocus>
-  <div id="usersConnected"></div>
 </div>
-<div id="data"></div>
-<div id="database"></div>
+<div class="container">
+  <div id="data"></div>
+  <div id="database"></div>
+</div>
