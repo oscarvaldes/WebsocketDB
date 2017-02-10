@@ -67,7 +67,7 @@ $(function() {
     }) //create table text
   }); //button.text click
 
-  $('button.table').click(function(event) {
+  $('button.tableb').click(function(event) {
     var format = 'table',
         sql = $('#query').val();
     $('button.editTable').text('edit table');
@@ -79,6 +79,7 @@ $(function() {
   }); //button.table click
 
   $(document).on('click', 'button.tables', function(event) {
+    $('button.editTable').text('edit table');
     var format = 'JSON',
     sql = $('#query').val(),
     matches = /from (.*?) /g.exec(sql),
