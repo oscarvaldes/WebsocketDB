@@ -99,10 +99,10 @@ function json(rows, fields) {
 } //json
 
 // Define/initialize our global vars
-var notes = []
-var initialNotes = false
-var socketCount = 0
-var addresses = [];
+var notes = [],
+initialNotes = false,
+socketCount = 0,
+addresses = [];
 
 io.sockets.on('connection', function(socket) {
   // Socket has connected, increase socket count

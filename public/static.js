@@ -1,11 +1,11 @@
 $(function() {
   // Connect to our node/websockets server
   var socket = io.connect('http://soiltest:8080'),
-  statement,
-  primaryKey,
-  answer = 0,
-  condition,
-  changes = [];
+      statement,
+      primaryKey,
+      answer = 0,
+      condition,
+      changes = [];
 
   function update(callback) {
 
@@ -85,9 +85,9 @@ $(function() {
     res = sql.replace(matches[1], $(this).text());
     sql = res;
 
-    $('button').removeClass('selected');
-    $(this).addClass('selected');
-    $('#query').val(sql);
+    // $('button').removeClass('selected');
+    // $(this).addClass('selected');
+    // $('#query').val(sql);
 
     socket.emit('query', sql, format);
     socket.on('create table JSON', function(data) {
@@ -131,7 +131,7 @@ $(function() {
 
   })
 
-  $('button').click(function() {
+  $(document).on('click', 'button', function(event) {
     $('button').removeClass('selected');
     $(this).addClass('selected');
   });
@@ -142,8 +142,9 @@ $(function() {
     if ($('button.editTable').text() === 'Save') {
 
       $('.updated').each(function() {
-        changes.push($(this).attr('sql'));
-        $(this).removeAttr('sql');
+        changes.push($(this).data('sql'));
+      //  $(this).removeAttr('sql');
+        $(this).removeData('sql');
         $(this).removeAttr('style');
         $(this).removeClass('updated');
 
@@ -161,7 +162,6 @@ $(function() {
       $('button.editTable').text('Save');
 
       $('.edit').click(function() {
-        update(function() {
           var format = 'text',
           tableName = $('#query').val(),
           matches = /from (.*?) /g.exec(tableName),
@@ -186,13 +186,12 @@ $(function() {
               var id = $(this).closest('tr').find('td:eq(1)').text();
               condition = id;
               statement = 'UPDATE ' + name + ' SET ' + th.text() + '=' + value + ' WHERE ' + primaryKey + '= ' + condition;
-              $(this).attr('sql', statement);
+            //  $(this).attr('sql', statement);
+              $(this).data('sql', statement);
 
             });
 
           })
-
-        });
 
       });
     } //tohere
@@ -331,5 +330,11 @@ $(function() {
     }
 
   });
+
+  $('button#excel').click(function(){
+    var url='data:application/vnd.ms-excel,' + encodeURIComponent($('#data').html())
+    location.href=url
+    return false
+})
 
 });
