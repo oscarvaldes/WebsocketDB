@@ -7,10 +7,6 @@ $(function() {
       condition,
       changes = [];
 
-  function update(callback) {
-
-    callback();
-  } //end of update
   socket.emit('load');
   socket.on('tables', function(rows) {
     $.each(rows, function(key, value) {
@@ -85,11 +81,10 @@ $(function() {
     matches = /from (.*?) /g.exec(sql),
     res = sql.replace(matches[1], $(this).text());
     sql = res;
-
+    $('#query').val(sql);
+    
     // $('button').removeClass('selected');
     // $(this).addClass('selected');
-    // $('#query').val(sql);
-
     socket.emit('query', sql, format);
     socket.on('create table JSON', function(data) {
       data = JSON.parse(data);
