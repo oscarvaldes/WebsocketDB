@@ -29,6 +29,9 @@ tr:nth-child(even) {
   width: 40em;
 }
 
+button.selected.btn-default {
+  background: #bfb;
+}
 button.selected {
   background: #bfb;
 }
@@ -48,4 +51,7 @@ tr:hover {
   position: fixed;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+.jumbotron{
+  background-color: #246;
 }

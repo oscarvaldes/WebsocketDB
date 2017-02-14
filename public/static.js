@@ -113,6 +113,7 @@ $(function() {
   socket.on('users connected', function(data) {
     var newstring,
     output,
+    list,
     addresses = [];
     $.each(data, function(key, value) {
 
@@ -122,8 +123,15 @@ $(function() {
         addresses.push(output);
       }
     });
-    $('#usersConnected').html('Users Connected:' + addresses)
+    // $('#usersConnected').html('Users Connected:' + addresses)
+    // $('.dropdown-menu').html('<p>'+addresses)
     // });
+    $.each(addresses, function(i){
+      list=
+      $('.dropdown-menu').html('<li>'+addresses+'</li>');
+      console.log($('.dropdown-menu').html());
+
+  });
 
   })
 
