@@ -115,6 +115,7 @@ $(function() {
     output,
     list,
     addresses = [];
+    $('.dropdown-menu').empty();
     $.each(data, function(key, value) {
 
       if (value != null) {
@@ -127,9 +128,7 @@ $(function() {
     // $('.dropdown-menu').html('<p>'+addresses)
     // });
     $.each(addresses, function(i){
-      list=
-      $('.dropdown-menu').html('<li>'+addresses+'</li>');
-      console.log($('.dropdown-menu').html());
+      $('.dropdown-menu').append('<li>'+addresses[i]+'</li>');
 
   });
 
