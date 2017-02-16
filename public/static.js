@@ -11,7 +11,7 @@ $(function() {
   socket.on('tables', function(rows) {
     $.each(rows, function(key, value) {
       $.each(value, function(key, value) {
-        var button = $('<button class="tables">' + value + '</button>');
+        var button = $('<button class="tables btn btn-default">' + value + '</button>');
         $('#database').append(button);
       });
     });
