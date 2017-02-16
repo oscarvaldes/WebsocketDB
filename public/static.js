@@ -7,6 +7,11 @@ $(function() {
       condition,
       changes = [];
 
+    $(document).on('click', 'button.btn.btn-default', function(event) {
+      $('button.btn.btn-default').removeClass('disabled');
+      $('#inputfilter').prop('disabled', false);
+    });
+
   socket.emit('load');
   socket.on('tables', function(rows) {
     $.each(rows, function(key, value) {
