@@ -1,5 +1,9 @@
 html {
+  height: 100%;
   background-color:#246
+}
+body {
+  min-height: 100%;
 }
 table {
   border-spacing: 0;
@@ -22,7 +26,7 @@ table  tbody{
 
 th {
   background: #def;
-  
+
 }
 
 td, th {
@@ -36,7 +40,7 @@ tr:nth-child(even) {
   background-color: #fff;
 }
 #data{
-  height: 500px;
+  height:75vh;
   overflow: auto;
   background-color: #f4f4f4
 }
