@@ -81,7 +81,8 @@ tr:hover {
 }
 #sidebar{
   width: 20vh;
-  float:left
+  float:left;
+  margin-right: 2vh;
 }
 #displaydb{
   background-color: #337ab7;
