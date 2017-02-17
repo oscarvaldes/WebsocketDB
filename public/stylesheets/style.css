@@ -73,12 +73,13 @@ tr:hover {
   background: yellow;
 }
 #info {
-  position: fixed;
+  position: static;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(25%, -30%);
 }
 .jumbotron{
   background-color: #246;
+  height: 10vh;
 }
 .dropdown-menu {
   left: 50%;
