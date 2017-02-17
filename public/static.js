@@ -12,6 +12,10 @@ $(function() {
       $('#inputfilter').prop('disabled', false);
     });
 
+    $('button#displaydb').click(function(event){
+      $('button.tables.btn.btn-default').toggle();
+    });
+
   socket.emit('load');
   socket.on('tables', function(rows) {
     $.each(rows, function(key, value) {

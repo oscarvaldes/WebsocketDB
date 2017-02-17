@@ -83,3 +83,8 @@ tr:hover {
   width: 20vh;
   float:left
 }
+#displaydb{
+  background-color: #337ab7;
+  border-color: #2e6da4;
+  width: 20vh;
+}
