@@ -77,12 +77,11 @@ tr:hover {
   transform: translate(-50%, 0);
 }
 #main{
-  padding-left:20vh
+  padding-left:22vh
 }
 #sidebar{
   width: 20vh;
   float:left;
-  margin-right: 2vh;
 }
 #displaydb{
   background-color: #337ab7;
