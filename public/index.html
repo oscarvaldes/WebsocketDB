@@ -15,9 +15,9 @@
     <div id="info">
       <input type="text" placeholder="Enter Table Name" id="query" autofocus value="select * from mytest limit 200 offset 0"><br>
       <div class="btn-group">
-        <button class="json btn btn-default">json</button>
-        <button class="text btn btn-default">text</button>
-        <button class="tableb btn btn-default">table</button>
+        <button class="json btn btn-default" title="recieve json">json</button>
+        <button class="text btn btn-default"title="recieve text">text</button>
+        <button class="tableb btn btn-default"title="recieve table">table</button>
         <button id="Users" class="btn btn-primary dropdown-toggle btn-sm" title="online users" type="button" data-toggle="dropdown"><i class="material-icons"style="font-size:18px;">group</i></button>
         <ul class="dropdown-menu">
         </ul>
@@ -26,10 +26,10 @@
     </div>
   </div>
 </div>
-<!-- <div class="container-fluid"> -->
-
-<!-- </div> -->
-<div class="container-fluid">
+<div  id="sidebar">
+<div class="btn-group-vertical" id="database"></div>
+</div>
+<div class="container-fluid"id="main">
   <div class="btn-group">
   <button class="editTable  btn btn-default disabled">edit table</button>
   <button class="entireTable  btn btn-default disabled">display entire table</button>
@@ -37,5 +37,4 @@
   </div>
   <input type="text" placeholder="filter table" id="inputfilter" autofocus disabled>
   <div id="data"></div>
-  <div id="database"></div>
 </div>

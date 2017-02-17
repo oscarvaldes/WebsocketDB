@@ -12,17 +12,6 @@ table {
   font: 13px arial;
   table-layout: fixed;
 }
-/*table thead tr{
-    display:block;
-}
-table th,table td{
-    width:100px;//fixed width
-}
-table  tbody{
-  display:block;
-  height:200px;
-  overflow:auto;
-}*/
 
 th {
   background: #def;
@@ -48,9 +37,7 @@ tr:nth-child(even) {
 #query {
   width: 40em;
 }
-button{
-  border-radius : 8px;
-}
+
 button.selected.btn-default {
   background: #bfb;
 }
@@ -79,11 +66,20 @@ tr:hover {
 }
 .jumbotron{
   background-color: #246;
-  height: 10vh;
+  height: 5vh;
+  padding-top: 2.5vh;
+  padding-bottom: 5vh;
 }
 .dropdown-menu {
   left: 50%;
   right: auto;
   text-align: center;
   transform: translate(-50%, 0);
+}
+#main{
+  padding-left:20vh
+}
+#sidebar{
+  width: 20vh;
+  float:left
 }
