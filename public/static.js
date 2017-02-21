@@ -133,7 +133,8 @@ $(function() {
         addresses.push(output);
       }
     });
-    // $('#usersConnected').html('Users Connected:' + addresses)
+    // $('#usersConnected').html('Users Connected:' + addresses.length);
+    $('#Users').html('<i class="material-icons"style="font-size:18px;">group</i>' + addresses.length);
     // $('.dropdown-menu').html('<p>'+addresses)
     // });
     $.each(addresses, function(i){
@@ -146,6 +147,9 @@ $(function() {
   $(document).on('click', 'button', function(event) {
     $('button').removeClass('selected');
     $(this).addClass('selected');
+    $('#displaydb').removeClass('selected');
+    $('#Users').removeClass('selected');
+
   });
 
   $('button.editTable').click(function(event) {
