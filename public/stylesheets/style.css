@@ -61,8 +61,6 @@ tr:hover {
 }
 #info {
   position: static;
-  left: 50%;
-  transform: translate(25%, -30%);
 }
 .jumbotron{
   background-color: #246;
