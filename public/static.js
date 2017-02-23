@@ -230,9 +230,10 @@ $(function() {
     if($('button.editTable').text()==='save'){
       bootbox.confirm("Warning continuing before saving will discard your changes, are you sure?", function(result){
         if(result==false){
-          console.log(result);
+          //do nothing
         }
         else{
+          $('button.editTable').text('edit table');
           sql = 'select * from ' + name;
           //console.log(sql);
           socket.emit('query', sql, format);

@@ -4,6 +4,7 @@ html {
 }
 body {
   min-height: 100%;
+  font-family: 'Open Sans', sans-serif;
 }
 table {
   border-spacing: 0;
@@ -80,6 +81,7 @@ tr:hover {
 #sidebar{
   width: 20vh;
   float:left;
+  padding-left: .5em;
 }
 #displaydb{
   /*background-color: #337ab7;
