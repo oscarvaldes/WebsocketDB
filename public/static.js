@@ -226,6 +226,33 @@ $(function() {
       console.log('There is an error in your SQL statement');
       // Not Found
     }
+    if($('button.editTable').text()==='Save'){
+      bootbox.confirm("Warning continuing before saving will discard your changes, are you sure?", function(result){
+        if(result==false){
+          console.log(result);
+        }
+        else{
+          sql = 'select * from ' + name;
+          //console.log(sql);
+          socket.emit('query', sql, format);
+          socket.on('create table text', function(data) {
+
+            var rows = data.split('\n'),
+              s = '<table>';
+
+            //  $('button.text').text('text: ' + out.responseText.length + ' bytes');
+
+            s += '<tr><th>' + rows[0].replace(/\|/g, '<th>');
+            rows.shift();
+            s += '<tr><td>' + rows.join('<tr><td>').replace(/\|/g, '<td>');
+            $('#data').html(s);
+
+          }) //create table text
+
+        }
+      })
+    }
+    else{
     sql = 'select * from ' + name;
     //console.log(sql);
     socket.emit('query', sql, format);
@@ -242,8 +269,9 @@ $(function() {
       $('#data').html(s);
 
     }) //create table text
+  }
 
-  });
+  });//end of entireTable
 
   //FILTER CODE
   $('#inputfilter').on('input', function() {
