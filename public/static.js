@@ -155,7 +155,7 @@ $(function() {
   $('button.editTable').click(function(event) {
 
     //send update request
-    if ($('button.editTable').text() === 'Save') {
+    if ($('button.editTable').text() === 'save') {
 
       $('.updated').each(function() {
         changes.push($(this).data('sql'));
@@ -175,7 +175,8 @@ $(function() {
     } else {
       $('td').attr('contenteditable', 'true');
       $('td').addClass('edit');
-      $('button.editTable').text('Save');
+      //$('button.editTable').text('Save');
+      $('button.editTable').html('<i class="material-icons"style="font-size:18px; color:#757575;">save</i>');
 
       $('.edit').click(function() {
           var format = 'text',
@@ -226,7 +227,7 @@ $(function() {
       console.log('There is an error in your SQL statement');
       // Not Found
     }
-    if($('button.editTable').text()==='Save'){
+    if($('button.editTable').text()==='save'){
       bootbox.confirm("Warning continuing before saving will discard your changes, are you sure?", function(result){
         if(result==false){
           console.log(result);
