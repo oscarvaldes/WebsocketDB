@@ -10,10 +10,21 @@ $(function() {
     $(document).on('click', 'button.btn.btn-default', function(event) {
       $('button.btn.btn-default').removeClass('disabled');
       $('#inputfilter').prop('disabled', false);
+    //   $('#data table').addClass('example');
+    //   var tableex = $('table.example');
+    //   console.log(tableex);
+    //     tableex.floatThead({
+    //     scrollContainer: function(tableex){
+    //         return $table.closest('#data');
+    //     }
+    // });
     });
 
     $('button#displaydb').click(function(event){
-      $('button.tables.btn.btn-default').toggle();
+    //  $('button.tables.btn.btn-default').toggle();
+      $( 'button.tables.btn.btn-default').slideToggle( "slow", function() {
+    // Animation complete.
+  });
     });
 
   socket.emit('load');
@@ -51,6 +62,7 @@ $(function() {
       $('#data').html(s);
 
     }) //create table JSON
+
   }); //button.json click
 
   $('button.text').click(function(event) {
@@ -86,7 +98,8 @@ $(function() {
   $(document).on('click', 'button.tables', function(event) {
     $('button.editTable').text('edit table');
     var format = 'JSON',
-    sql = $('#query').val(),
+    sql= 'select * from '+ $(this).text()+' limit 200 offset 0',
+    // sql = $('#query').val(),
     matches = /from (.*?) /g.exec(sql),
     res = sql.replace(matches[1], $(this).text());
     sql = res;
