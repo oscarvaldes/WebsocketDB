@@ -67,7 +67,7 @@ function text(rows, fields, fldnames, data) {
 } //text
 
 function table(rows, fields, fldnames, data) {
-  var s = '<table><tr>';
+  var s = '<table><tr class="header">';
 
   if (fldnames) {
     fields.forEach(function(fld) {

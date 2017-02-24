@@ -10,14 +10,7 @@ $(function() {
     $(document).on('click', 'button.btn.btn-default', function(event) {
       $('button.btn.btn-default').removeClass('disabled');
       $('#inputfilter').prop('disabled', false);
-    //   $('#data table').addClass('example');
-    //   var tableex = $('table.example');
-    //   console.log(tableex);
-    //     tableex.floatThead({
-    //     scrollContainer: function(tableex){
-    //         return $table.closest('#data');
-    //     }
-    // });
+
     });
 
     $('button#displaydb').click(function(event){
@@ -46,7 +39,7 @@ $(function() {
       data = JSON.parse(data);
       var s = '<table>',
           flds = Object.keys(data[0]);
-      s += '<tr>';
+      s += '<tr class="header">';
       flds.forEach(function(fld) {
         s += '<th>' + fld;
       });
@@ -76,7 +69,7 @@ $(function() {
     var rows = data.split('\n'),
         s = '<table>';
 
-      s += '<tr><th>' + rows[0].replace(/\|/g, '<th>');
+      s += '<tr class="header"><th>' + rows[0].replace(/\|/g, '<th>');
       rows.shift();
       s += '<tr><td>' + rows.join('<tr><td>').replace(/\|/g, '<td>');
       $('#data').html(s);
@@ -112,7 +105,7 @@ $(function() {
       data = JSON.parse(data);
       var s = '<table>',
           flds = Object.keys(data[0]);
-      s += '<tr>';
+      s += '<tr class="header">';
       flds.forEach(function(fld) {
         s += '<th>' + fld;
       });
@@ -278,7 +271,7 @@ $(function() {
 
       //  $('button.text').text('text: ' + out.responseText.length + ' bytes');
 
-      s += '<tr><th>' + rows[0].replace(/\|/g, '<th>');
+      s += '<tr class="header"><th>' + rows[0].replace(/\|/g, '<th>');
       rows.shift();
       s += '<tr><td>' + rows.join('<tr><td>').replace(/\|/g, '<td>');
       $('#data').html(s);

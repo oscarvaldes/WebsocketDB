@@ -91,3 +91,12 @@ tr:hover {
 button{
   height: 35px;
 }
+tr.header {
+    position: fixed;
+    }
+
+/*td {
+    position: relative;
+    top: 25px;
+
+    }*/
