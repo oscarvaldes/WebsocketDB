@@ -7,6 +7,7 @@ $(function() {
       condition,
       changes = [];
 
+      $('#success-alert').hide();
       $('#query').on('propertychange input', function (e) {
           if($('#query').val()===''){
             $('button.main.btn.btn-default').removeClass('selected');
@@ -21,6 +22,7 @@ $(function() {
 
     $(document).on('click', 'button.btn.btn-default', function(event) {
       $('button.btn.btn-default').removeClass('disabled');
+      $('button.btn.btn-default').prop('disabled', false);
       $('#inputfilter').prop('disabled', false);
 
     });
@@ -191,6 +193,10 @@ $(function() {
       statement = '';
       $('td').attr('contenteditable', 'false');
       $('td').removeClass('edit');
+      $("#success-alert").alert();
+      $("#success-alert").fadeTo(2000, 500).slideUp(500, function(){
+      $("#success-alert").slideUp(500);
+      });
       $('button.editTable').text('edit table');
     } else {
       $('td').attr('contenteditable', 'true');
@@ -382,9 +388,10 @@ $(function() {
         return sp[0] + 'offset ' + ofs;
       });
       //create case for edit button
-      if ($('button.editTable').hasClass('selected')) {
+      if ($('button.tables').hasClass('selected')) {
         $('button.text').click();
-      } else {
+      }
+     else {
         $('button.selected').click();
       }
       //   if($('button.tables').hasClass('selected')){

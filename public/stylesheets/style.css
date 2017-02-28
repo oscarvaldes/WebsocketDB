@@ -97,6 +97,9 @@ button{
 .btn.main:hover{
   border-color:#A9A9A9;
 }
+.alert.alert-success{
+  /*display:none;*/
+}
 /*tr.header {
     position: fixed;
     }*/
