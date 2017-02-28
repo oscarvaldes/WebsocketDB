@@ -7,6 +7,18 @@ $(function() {
       condition,
       changes = [];
 
+      $('#query').on('propertychange input', function (e) {
+          if($('#query').val()===''){
+            $('button.main.btn.btn-default').removeClass('selected');
+            $('button.main.btn.btn-default').addClass('disabled');
+            $('button.main.btn.btn-default').prop('disabled', true);
+          }
+          else{
+            $('button.main.btn.btn-default').removeClass('disabled');
+            $('button.main.btn.btn-default').prop('disabled', false);
+          }
+      });
+
     $(document).on('click', 'button.btn.btn-default', function(event) {
       $('button.btn.btn-default').removeClass('disabled');
       $('#inputfilter').prop('disabled', false);
@@ -14,7 +26,7 @@ $(function() {
     });
 
     $('button#displaydb').click(function(event){
-    //  $('button.tables.btn.btn-default').toggle();
+
       $( 'button.tables.btn.btn-default').slideToggle( "slow", function() {
     // Animation complete.
   });
@@ -89,6 +101,8 @@ $(function() {
   }); //button.table click
 
   $(document).on('click', 'button.tables', function(event) {
+    $('button.main.btn.btn-default').removeClass('disabled');
+    $('button.main.btn.btn-default').prop('disabled', false);
     $('button.editTable').text('edit table');
     var format = 'JSON',
     sql= 'select * from '+ $(this).text()+' limit 200 offset 0',

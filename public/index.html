@@ -17,9 +17,9 @@
     <div id="info">
       <input type="text" placeholder="Enter SQL Query" id="query" autofocus value="">
       <div class="btn-group">
-        <button class="json btn btn-default" title="recieve json">json</button>
-        <button class="text btn btn-default"title="recieve text">text</button>
-        <button class="tableb btn btn-default"title="recieve table">table</button>
+        <button class="main json btn btn-default disabled" title="recieve json"disabled>json</button>
+        <button class="main text btn btn-default disabled"title="recieve text"disabled>text</button>
+        <button class="main tableb btn btn-default disabled"title="recieve table"disabled>table</button>
         <button id="Users" class="btn btn-primary dropdown-toggle btn-sm" title="online users" type="button" data-toggle="dropdown"><i class="material-icons"style="font-size:18px;">group</i></button>
         <ul class="dropdown-menu">
         </ul>
@@ -35,11 +35,11 @@
 </div>
 <div class="container-fluid"id="main">
   <div class="btn-group">
-  <button class="editTable  btn btn-default disabled">edit table</button>
-  <button class="entireTable  btn btn-default disabled">display entire table</button>
-  <button id="excel" class=" btn btn-default disabled" title="export to excel"> <img src="/images/excel.png"style="width:18px;height:18px;"</button>
+  <button class="editTable btn btn-default disabled"disabled>edit table</button>
+  <button class="entireTable btn btn-default disabled"disabled>display entire table</button>
+  <button id="excel" class=" btn btn-default disabled" title="export to excel"disabled> <img src="/images/excel.png"style="width:18px;height:18px;"</button>
   </div>
-  <input type="text" placeholder="filter table" id="inputfilter" autofocus disabled>
+  <input type="text" placeholder="Filter Table" id="inputfilter" disabled>
   <div id="data">
     <!-- <table id="tbl">
     </table> -->

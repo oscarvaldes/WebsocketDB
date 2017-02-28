@@ -91,9 +91,15 @@ tr:hover {
 button{
   height: 35px;
 }
-tr.header {
+.btn.main{
+  border-color:#A9A9A9;
+}
+.btn.main:hover{
+  border-color:#A9A9A9;
+}
+/*tr.header {
     position: fixed;
-    }
+    }*/
 
 /*td {
     position: relative;
