@@ -365,11 +365,13 @@ $(function() {
       });
       //create case for edit button
       if ($('button.tables').hasClass('selected')) {
-        // $('button.text').click();
+        createTableText();
+      }
+      else if($('button.main').hasClass('selected')){
         createTableText();
       }
      else {
-        $('button.selected').click();
+        // $('button.selected').click();
       }
       //   if($('button.tables').hasClass('selected')){
       //     $('button.text').click();
