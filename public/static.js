@@ -7,9 +7,10 @@ $(function() {
       condition,
       changes = [];
 
-      function createTableText(){
-        var format = 'text',
-            sql = $('#query').val();
+      function createTableText(sql){
+        var sql = sql || $('#query').val();
+        var format = 'text';
+            // sql = $('#query').val();
         $('button.editTable').text('edit table');
         socket.emit('query', sql, format);
 
@@ -25,9 +26,10 @@ $(function() {
 
         }) //create table text
       }
-      function createTableJSON(){
-        var format = 'JSON',
-            sql = $('#query').val();
+      function createTableJSON(sql){
+        var sql = sql || $('#query').val();
+        var format = 'JSON';
+            // sql = $('#query').val();
         $('button.editTable').text('edit table');
         socket.emit('query', sql, format);
 
@@ -53,9 +55,10 @@ $(function() {
         }) //create table JSON
 
       }
-      function createTableTable(){
-        var format = 'table',
-            sql = $('#query').val();
+      function createTableTable(sql){
+        var sql = sql || $('#query').val();
+        var format = 'table';
+            // sql = $('#query').val();
         $('button.editTable').text('edit table');
         socket.emit('query', sql, format);
 
@@ -248,19 +251,7 @@ $(function() {
         else{
           $('button.editTable').text('edit table');
           sql = 'select * from ' + name;
-          //console.log(sql);
-          socket.emit('query', sql, format);
-          socket.on('create table text', function(data) {
-
-            var rows = data.split('\n'),
-              s = '<table>';
-
-            s += '<tr><th>' + rows[0].replace(/\|/g, '<th>');
-            rows.shift();
-            s += '<tr><td>' + rows.join('<tr><td>').replace(/\|/g, '<td>');
-            $('#data').html(s);
-
-          }) //create table text
+          createTableText(sql);
 
         }
       })
