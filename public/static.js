@@ -7,6 +7,63 @@ $(function() {
       condition,
       changes = [];
 
+      function createTableText(){
+        var format = 'text',
+            sql = $('#query').val();
+        $('button.editTable').text('edit table');
+        socket.emit('query', sql, format);
+
+        socket.on('create table text', function(data) {
+
+        var rows = data.split('\n'),
+            s = '<table>';
+
+          s += '<tr class="header"><th>' + rows[0].replace(/\|/g, '<th>');
+          rows.shift();
+          s += '<tr><td>' + rows.join('<tr><td>').replace(/\|/g, '<td>');
+          $('#data').html(s);
+
+        }) //create table text
+      }
+      function createTableJSON(){
+        var format = 'JSON',
+            sql = $('#query').val();
+        $('button.editTable').text('edit table');
+        socket.emit('query', sql, format);
+
+        socket.on('create table JSON', function(data) {
+          data = JSON.parse(data);
+          var s = '<table>',
+              flds = Object.keys(data[0]);
+          s += '<tr class="header">';
+          flds.forEach(function(fld) {
+            s += '<th>' + fld;
+          });
+
+          data.forEach(function(row) {
+            s += '<tr>';
+            flds.forEach(function(fld) {
+              s += '<td>' + row[fld];
+            });
+          });
+
+          s += '</table>';
+          $('#data').html(s);
+
+        }) //create table JSON
+
+      }
+      function createTableTable(){
+        var format = 'table',
+            sql = $('#query').val();
+        $('button.editTable').text('edit table');
+        socket.emit('query', sql, format);
+
+        socket.on('create table table', function(data) {
+          $('#data').html(data);
+        }) //create table table
+      }
+
       $('#success-alert').hide();
       $('#query').on('propertychange input', function (e) {
           if($('#query').val()===''){
@@ -44,62 +101,15 @@ $(function() {
     });
   })
   $('button.json').click(function(event) {
-    var format = 'JSON',
-        sql = $('#query').val();
-    $('button.editTable').text('edit table');
-    socket.emit('query', sql, format);
-
-    socket.on('create table JSON', function(data) {
-      data = JSON.parse(data);
-      var s = '<table>',
-          flds = Object.keys(data[0]);
-      s += '<tr class="header">';
-      flds.forEach(function(fld) {
-        s += '<th>' + fld;
-      });
-
-      data.forEach(function(row) {
-        s += '<tr>';
-        flds.forEach(function(fld) {
-          s += '<td>' + row[fld];
-        });
-      });
-
-      s += '</table>';
-      $('#data').html(s);
-
-    }) //create table JSON
-
+    createTableJSON();
   }); //button.json click
 
   $('button.text').click(function(event) {
-    var format = 'text',
-        sql = $('#query').val();
-    $('button.editTable').text('edit table');
-    socket.emit('query', sql, format);
-
-    socket.on('create table text', function(data) {
-
-    var rows = data.split('\n'),
-        s = '<table>';
-
-      s += '<tr class="header"><th>' + rows[0].replace(/\|/g, '<th>');
-      rows.shift();
-      s += '<tr><td>' + rows.join('<tr><td>').replace(/\|/g, '<td>');
-      $('#data').html(s);
-
-    }) //create table text
+    createTableText();
   }); //button.text click
 
   $('button.tableb').click(function(event) {
-    var format = 'table',
-        sql = $('#query').val();
-    $('button.editTable').text('edit table');
-    socket.emit('query', sql, format);
-
-    socket.on('create table table', function(data) {
-      $('#data').html(data);
-    }) //create table table
+    createTableTable();
   }); //button.table click
 
   $(document).on('click', 'button.tables', function(event) {
@@ -114,30 +124,7 @@ $(function() {
     sql = res;
     $('#query').val(sql);
 
-    // $('button').removeClass('selected');
-    // $(this).addClass('selected');
-    socket.emit('query', sql, format);
-    socket.on('create table JSON', function(data) {
-      data = JSON.parse(data);
-      var s = '<table>',
-          flds = Object.keys(data[0]);
-      s += '<tr class="header">';
-      flds.forEach(function(fld) {
-        s += '<th>' + fld;
-      });
-
-      data.forEach(function(row) {
-        s += '<tr>';
-        flds.forEach(function(fld) {
-          s += '<td>' + row[fld];
-        });
-      });
-
-      s += '</table>';
-      $('#data').html(s);
-
-    }) //create table JSON
-
+    createTableJSON();
   });
 
   // New socket connected, display new count on page
@@ -268,8 +255,6 @@ $(function() {
             var rows = data.split('\n'),
               s = '<table>';
 
-            //  $('button.text').text('text: ' + out.responseText.length + ' bytes');
-
             s += '<tr><th>' + rows[0].replace(/\|/g, '<th>');
             rows.shift();
             s += '<tr><td>' + rows.join('<tr><td>').replace(/\|/g, '<td>');
@@ -389,7 +374,8 @@ $(function() {
       });
       //create case for edit button
       if ($('button.tables').hasClass('selected')) {
-        $('button.text').click();
+        // $('button.text').click();
+        createTableText();
       }
      else {
         $('button.selected').click();
