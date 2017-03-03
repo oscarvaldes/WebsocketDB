@@ -287,6 +287,17 @@ $(function() {
 
   });//end of entireTable
 
+  $('button.admin').click(function(event) {
+    bootbox.prompt({
+    title: "Authentification Required",
+    inputType: 'password',
+    callback: function (result) {
+        // console.log(result);
+        //send password to server here
+    }
+});
+  }); //button.json click
+
   //FILTER CODE
   $('#inputfilter').on('input', function() {
     var RE = new RegExp($(this).val(), 'i');
@@ -365,7 +376,7 @@ $(function() {
     } else if (e.which === 38) { //up
       delta = -5;
     } else if (e.which === 13) { //up
-      $('button.JSON').click();
+      $('button.main.json').click();
     }
 
     if (delta) {
