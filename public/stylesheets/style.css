@@ -10,7 +10,7 @@ table {
   border-spacing: 0;
   border-collapse: collapse;
   border: 1px solid black;
-  font: 13px arial;
+  /*font: 13px arial;*/
   table-layout: fixed;
 }
 
@@ -45,10 +45,6 @@ button.selected.btn-default {
 button.selected {
   background: #bfb;
 }
-button#Users{
-  /*background-color: #337ab7;
-  border-color: #2e6da4;*/
-}
 .edit:hover{
   background-color: orange;
 }
@@ -68,6 +64,7 @@ tr:hover {
   height: 5vh;
   padding-top: 2.5vh;
   padding-bottom: 5vh;
+  margin-bottom: 2vh;
 }
 .dropdown-menu {
   left: 50%;
@@ -76,17 +73,26 @@ tr:hover {
   transform: translate(-50%, 0);
 }
 #main{
-  padding-left:22vh
+  padding-left:22vh;
+  padding-right:22vh;
 }
 #sidebar{
   width: 20vh;
   float:left;
-  padding-left: .5em;
+  margin-left: .5em;
+}
+#tools{
+  width: 20vh;
+  float:right;
+  margin-right: .5em;
 }
 #displaydb{
-  /*background-color: #337ab7;
-  border-color: #2e6da4;*/
   width: 20vh;
+}
+#inputfilter{
+  width: 20vh;
+  height: 35px;
+  padding-right: 0px;
 }
 button{
   height: 35px;
@@ -100,6 +106,7 @@ button{
 .alert.alert-success{
   /*display:none;*/
 }
+
 /*tr.header {
     position: fixed;
     }*/

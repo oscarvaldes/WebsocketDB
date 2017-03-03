@@ -1,7 +1,7 @@
 $(function() {
   // Connect to our node/websockets server
-  var socket = io.connect('http://soiltest:8080'),
-      statement,
+  var socket = io.connect('http://soiltest:8080');
+      var statement,
       primaryKey,
       answer = 0,
       condition,
@@ -371,6 +371,15 @@ $(function() {
         createTableText();
       }
      else {
+       createTableText();
+      //  $('.updated').each(function() {
+      //    changes.push($(this).data('sql'));
+       //  $(this).removeAttr('sql');
+        //  $(this).removeData('sql');
+        //  $(this).removeAttr('style');
+        //  $(this).removeClass('updated');
+
+      //  });
         // $('button.selected').click();
       }
       //   if($('button.tables').hasClass('selected')){
