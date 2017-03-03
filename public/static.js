@@ -292,7 +292,10 @@ $(function() {
     title: "Authentification Required",
     inputType: 'password',
     callback: function (result) {
-        // console.log(result);
+        console.log(result);
+        if(result==null){
+          $('button.user').click();
+        }
         //send password to server here
     }
 });

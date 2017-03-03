@@ -78,6 +78,8 @@ tr:hover {
 }
 #sidebar{
   width: 20vh;
+  height: 75vh;
+  overflow: auto;
   float:left;
   margin-left: .5em;
 }
