@@ -67,6 +67,16 @@ $(function() {
         }) //create table table
       }
 
+      $('.btn-toggle').click(function() {
+    $(this).find('.btn').toggleClass('active');
+
+    if ($(this).find('.btn-primary').size()>0) {
+    	$(this).find('.btn').toggleClass('btn-primary');
+    }
+    $(this).find('.btn').toggleClass('btn-default');
+
+});
+
       $('#success-alert').hide();
       $('#query').on('propertychange input', function (e) {
           if($('#query').val()===''){
@@ -354,6 +364,8 @@ $(function() {
       delta = 5;
     } else if (e.which === 38) { //up
       delta = -5;
+    } else if (e.which === 13) { //up
+      $('button.JSON').click();
     }
 
     if (delta) {
