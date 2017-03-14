@@ -292,15 +292,36 @@ $(function() {
     title: "Authentification Required",
     inputType: 'password',
     callback: function (result) {
-        console.log(result);
-        if(result==null){
+        // console.log(result);
+        if(result===''){
+          bootbox.alert('Error: No Password', function(){
+             $('button.user').click();
+           });
+        }
+        else if(result==null){
           $('button.user').click();
+        }
+        else{
+          socket.emit('authenticate', result);
+          socket.on('exception', function(error) {
+            bootbox.alert(error, function(){
+               $('button.user').click();
+             });
+          })
+          socket.on('authenticated', function(message) {
+            bootbox.alert(message, function(){
+
+             });
+          })
         }
         //send password to server here
     }
 });
   }); //button.json click
 
+  // $('button.user').click(function(event){
+  //   socket.emit('authenticate');
+  // });
   //FILTER CODE
   $('#inputfilter').on('input', function() {
     var RE = new RegExp($(this).val(), 'i');

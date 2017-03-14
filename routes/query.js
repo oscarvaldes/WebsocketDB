@@ -7,6 +7,7 @@ var express = require('express'),
   moment = require('moment'),
   tableName,
   connection;
+  var admin=false;
 var io = require('socket.io').listen(8080);
 
 router.use(bodyParser.urlencoded({
@@ -163,6 +164,24 @@ io.sockets.on('connection', function(socket) {
     db.query("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA='agdbmysql' ", function(err, rows, fields) {
       socket.emit('tables', rows);
     });
+  })
+
+  socket.on('authenticate', function(password) {
+  if(password===''||password==null){
+    admin=false;
+    socket.emit('exception','Error: No Password');
+  }
+  else{
+    if(password==='Blue$apph1re#2'){
+    admin=true;
+    socket.emit('authenticated','Admin Succesfully Logged In');
+    }
+    else{
+    admin=false;
+    socket.emit('exception','Error: Wrong Password');
+    }
+  }
+  console.log(admin);
   })
 
   // Initial app start, run db query
