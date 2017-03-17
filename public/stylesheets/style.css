@@ -39,10 +39,10 @@ tr:nth-child(even) {
   width: 40em;
 }
 
-button.selected.btn-default {
+button.selected.tables.btn-default {
   background: #bfb;
 }
-button.selected {
+button.selected.tables {
   background: #bfb;
 }
 .edit:hover{

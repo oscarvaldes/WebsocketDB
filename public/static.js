@@ -268,56 +268,51 @@ $(function() {
     }
     else{
     sql = 'select * from ' + name;
-    //console.log(sql);
-    socket.emit('query', sql, format);
-    socket.on('create table text', function(data) {
-
-      var rows = data.split('\n'),
-        s = '<table>';
-
-      //  $('button.text').text('text: ' + out.responseText.length + ' bytes');
-
-      s += '<tr class="header"><th>' + rows[0].replace(/\|/g, '<th>');
-      rows.shift();
-      s += '<tr><td>' + rows.join('<tr><td>').replace(/\|/g, '<td>');
-      $('#data').html(s);
-
-    }) //create table text
+    createTableText(sql);
   }
 
   });//end of entireTable
 
-  $('button.admin').click(function(event) {
-    bootbox.prompt({
-    title: "Authentification Required",
-    inputType: 'password',
-    callback: function (result) {
-        // console.log(result);
-        if(result===''){
-          bootbox.alert('Error: No Password', function(){
-             $('button.user').click();
-           });
-        }
-        else if(result==null){
-          $('button.user').click();
-        }
-        else{
-          socket.emit('authenticate', result);
-          socket.on('exception', function(error) {
-            bootbox.alert(error, function(){
-               $('button.user').click();
-             });
-          })
-          socket.on('authenticated', function(message) {
-            bootbox.alert(message, function(){
-
-             });
-          })
-        }
-        //send password to server here
-    }
-});
-  }); //button.json click
+  $('button.admin').click(function() {
+    socket.emit('authenticate', 'Blue$apph1re#2');
+    socket.on('verified', function(message) {
+      bootbox.alert(message, function(){
+      console.log(message);
+      });
+    })
+//     bootbox.prompt({
+//     title: "Authentification Required",
+//     inputType: 'password',
+//     callback: function (result) {
+//         // console.log(result);
+//         // if(result===''){
+//         //   bootbox.alert('Error: No Password', function(){
+//         //      $('button.user').click();
+//         //    });
+//         // }
+//         // else if(result==null){
+//         //   $('button.user').click();
+//         // }
+//         // else{
+//           socket.emit('authenticate', result);
+//           console.log(result);
+//           socket.on('verified', function(message) {
+//             bootbox.alert(message, function(){
+//               console.log(message);
+//              });
+//           })
+//           socket.on('exception', function(error) {
+//             // console.log(error);
+//             bootbox.alert(error, function(){
+//               //  $('button.user').click();
+//              });
+//           })
+//
+//         // }
+//         //send password to server here
+//     }
+// });
+  }); //button.admin click
 
   // $('button.user').click(function(event){
   //   socket.emit('authenticate');
@@ -419,22 +414,9 @@ $(function() {
       }
      else {
        createTableText();
-      //  $('.updated').each(function() {
-      //    changes.push($(this).data('sql'));
-       //  $(this).removeAttr('sql');
-        //  $(this).removeData('sql');
-        //  $(this).removeAttr('style');
-        //  $(this).removeClass('updated');
 
-      //  });
-        // $('button.selected').click();
       }
-      //   if($('button.tables').hasClass('selected')){
-      //     $('button.text').click();
-      //   }
-      //   else{
-      //   $('button.selected').click();
-      // }
+
     }
 
   });

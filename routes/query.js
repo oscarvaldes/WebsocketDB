@@ -167,21 +167,20 @@ io.sockets.on('connection', function(socket) {
   })
 
   socket.on('authenticate', function(password) {
-  if(password===''||password==null){
+    if(password==='Blue$apph1re#2'){
+      admin=true;
+      socket.emit('verified','Admin Succesfully Logged In');
+    }
+    else if(password===''||password==null){
     admin=false;
     socket.emit('exception','Error: No Password');
-  }
-  else{
-    if(password==='Blue$apph1re#2'){
-    admin=true;
-    socket.emit('authenticated','Admin Succesfully Logged In');
     }
     else{
     admin=false;
     socket.emit('exception','Error: Wrong Password');
     }
-  }
-  console.log(admin);
+
+  console.log('admin log in attempt success: '+admin);
   })
 
   // Initial app start, run db query
