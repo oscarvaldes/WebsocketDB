@@ -6,8 +6,8 @@ var express = require('express'),
   path = require('path'),
   moment = require('moment'),
   tableName,
-  connection;
-  var admin=false;
+  connection,
+  admin = false;
 var io = require('socket.io').listen(8080);
 
 router.use(bodyParser.urlencoded({
@@ -101,91 +101,89 @@ function json(rows, fields) {
 
 // Define/initialize our global vars
 var notes = [],
-initialNotes = false,
-socketCount = 0,
-addresses = [];
+  initialNotes = false,
+  socketCount = 0,
+  addresses = [];
 
 io.sockets.on('connection', function(socket) {
-  // Socket has connected, increase socket count
-  socketCount++
-  addresses.length = socketCount;
-  //console.log(socket.handshake.address);
-  addresses.push(socket.handshake.address);
-  // Let all sockets know how many are connected
-  //io.sockets.emit('users connected', socketCount)
-  io.sockets.emit('users connected', addresses)
-
-  socket.on('disconnect', function() {
-    // Decrease the socket count on a disconnect, emit
-    socketCount--
-    addresses.length = socketCount + 1;
+    // Socket has connected, increase socket count
+    socketCount++
+    addresses.length = socketCount;
+    //console.log(socket.handshake.address);
+    addresses.push(socket.handshake.address);
+    // Let all sockets know how many are connected
+    //io.sockets.emit('users connected', socketCount)
     io.sockets.emit('users connected', addresses)
-  })
 
-  socket.on('query', function(sql, format) {
-    var type = format || 'text',
-      data = 'true',
-      fldnames = 'true';
+    socket.on('disconnect', function() {
+      // Decrease the socket count on a disconnect, emit
+      socketCount--
+      addresses.length = socketCount + 1;
+      io.sockets.emit('users connected', addresses)
+    })
 
-    db.query(sql, function(err, rows, fields) {
-      if (type === 'JSON') {
-        socket.emit('create table JSON', json(rows, fields));
-      } else if (type === 'text') {
-        socket.emit('create table text', text(rows, fields, fldnames, data));
-      } else if (type === 'table') {
-        socket.emit('create table table', table(rows, fields, fldnames, data));
+    socket.on('query', function(sql, format) {
+      var type = format || 'text',
+        data = 'true',
+        fldnames = 'true';
+
+      db.query(sql, function(err, rows, fields) {
+        if (type === 'JSON') {
+          socket.emit('create table JSON', json(rows, fields));
+        } else if (type === 'text') {
+          socket.emit('create table text', text(rows, fields, fldnames, data));
+        } else if (type === 'table') {
+          socket.emit('create table table', table(rows, fields, fldnames, data));
+        }
+
+
+      }); //query
+    })
+
+    socket.on('primary', function(tableName) {
+      db.query("SHOW INDEX FROM `agdbmysql`." + tableName + " WHERE `Key_name` = 'PRIMARY';", function(err, rows, fields) {
+        var key = rows[0].Column_name;
+        socket.emit('key', key);
+
+      });
+
+    })
+
+    socket.on('update', function(changes) {
+      //  console.log(statement);
+      changes.forEach(function(statement) {
+        //console.log(value);
+        db.query(statement, function(err, rows, fields) {});
+
+      });
+
+
+    })
+
+    socket.on('load', function() {
+      db.query("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA='agdbmysql' ", function(err, rows, fields) {
+        socket.emit('tables', rows);
+      });
+    })
+
+    socket.on('authenticate', function(password) {
+      if (password === 'Blue$apph1re#2') {
+        admin = true;
+        socket.emit('verified', 'Admin Succesfully Logged In');
+      } else if (password === '' || password == null) {
+        admin = false;
+        socket.emit('exception', 'Error: No Password');
+      } else {
+        admin = false;
+        socket.emit('exception', 'Error: Wrong Password');
       }
 
+      console.log('admin log in attempt success: ' + admin);
+    })
 
-    }); //query
-  })
+    // Initial app start, run db query
 
-  socket.on('primary', function(tableName) {
-    db.query("SHOW INDEX FROM `agdbmysql`." + tableName + " WHERE `Key_name` = 'PRIMARY';", function(err, rows, fields) {
-      var key = rows[0].Column_name;
-      socket.emit('key', key);
-
-    });
-
-  })
-
-  socket.on('update', function(changes) {
-    //  console.log(statement);
-    changes.forEach(function(statement) {
-      //console.log(value);
-      db.query(statement, function(err, rows, fields) {});
-
-    });
-
-
-  })
-
-  socket.on('load', function() {
-    db.query("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA='agdbmysql' ", function(err, rows, fields) {
-      socket.emit('tables', rows);
-    });
-  })
-
-  socket.on('authenticate', function(password) {
-    if(password==='Blue$apph1re#2'){
-      admin=true;
-      socket.emit('verified','Admin Succesfully Logged In');
-    }
-    else if(password===''||password==null){
-    admin=false;
-    socket.emit('exception','Error: No Password');
-    }
-    else{
-    admin=false;
-    socket.emit('exception','Error: Wrong Password');
-    }
-
-  console.log('admin log in attempt success: '+admin);
-  })
-
-  // Initial app start, run db query
-
-}) //connection
+  }) //connection
 
 
 

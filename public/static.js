@@ -1,108 +1,109 @@
 $(function() {
   // Connect to our node/websockets server
   var socket = io.connect('http://soiltest:8080');
-      var statement,
-      primaryKey,
-      answer = 0,
-      condition,
-      changes = [];
+  var statement,
+    primaryKey,
+    answer = 0,
+    condition,
+    changes = [];
 
-      function createTableText(sql){
-        var sql = sql || $('#query').val();
-        var format = 'text';
-            // sql = $('#query').val();
-        $('button.editTable').text('edit table');
-        socket.emit('query', sql, format);
+  function createTableText(sql) {
+    var sql = sql || $('#query').val();
+    var format = 'text';
+    // sql = $('#query').val();
+    $('button.editTable').text('edit table');
+    socket.emit('query', sql, format);
 
-        socket.on('create table text', function(data) {
+    socket.on('create table text', function(data) {
 
         var rows = data.split('\n'),
-            s = '<table>';
+          s = '<table>';
 
-          s += '<tr class="header"><th>' + rows[0].replace(/\|/g, '<th>');
-          rows.shift();
-          s += '<tr><td>' + rows.join('<tr><td>').replace(/\|/g, '<td>');
-          $('#data').html(s);
+        s += '<tr class="header"><th>' + rows[0].replace(/\|/g, '<th>');
+        rows.shift();
+        s += '<tr><td>' + rows.join('<tr><td>').replace(/\|/g, '<td>');
+        $('#data').html(s);
 
-        }) //create table text
-      }
-      function createTableJSON(sql){
-        var sql = sql || $('#query').val();
-        var format = 'JSON';
-            // sql = $('#query').val();
-        $('button.editTable').text('edit table');
-        socket.emit('query', sql, format);
+      }) //create table text
+  }
 
-        socket.on('create table JSON', function(data) {
-          data = JSON.parse(data);
-          var s = '<table>',
-              flds = Object.keys(data[0]);
-          s += '<tr class="header">';
+  function createTableJSON(sql) {
+    var sql = sql || $('#query').val();
+    var format = 'JSON';
+    // sql = $('#query').val();
+    $('button.editTable').text('edit table');
+    socket.emit('query', sql, format);
+
+    socket.on('create table JSON', function(data) {
+        data = JSON.parse(data);
+        var s = '<table>',
+          flds = Object.keys(data[0]);
+        s += '<tr class="header">';
+        flds.forEach(function(fld) {
+          s += '<th>' + fld;
+        });
+
+        data.forEach(function(row) {
+          s += '<tr>';
           flds.forEach(function(fld) {
-            s += '<th>' + fld;
+            s += '<td>' + row[fld];
           });
+        });
 
-          data.forEach(function(row) {
-            s += '<tr>';
-            flds.forEach(function(fld) {
-              s += '<td>' + row[fld];
-            });
-          });
+        s += '</table>';
+        $('#data').html(s);
 
-          s += '</table>';
-          $('#data').html(s);
+      }) //create table JSON
 
-        }) //create table JSON
+  }
 
-      }
-      function createTableTable(sql){
-        var sql = sql || $('#query').val();
-        var format = 'table';
-            // sql = $('#query').val();
-        $('button.editTable').text('edit table');
-        socket.emit('query', sql, format);
+  function createTableTable(sql) {
+    var sql = sql || $('#query').val();
+    var format = 'table';
+    // sql = $('#query').val();
+    $('button.editTable').text('edit table');
+    socket.emit('query', sql, format);
 
-        socket.on('create table table', function(data) {
-          $('#data').html(data);
-        }) //create table table
-      }
+    socket.on('create table table', function(data) {
+        $('#data').html(data);
+      }) //create table table
+  }
 
-      $('.btn-toggle').click(function() {
+  $('.btn-toggle').click(function() {
     $(this).find('.btn').toggleClass('active');
 
-    if ($(this).find('.btn-primary').size()>0) {
-    	$(this).find('.btn').toggleClass('btn-primary');
+    if ($(this).find('.btn-primary').size() > 0) {
+      $(this).find('.btn').toggleClass('btn-primary');
     }
     $(this).find('.btn').toggleClass('btn-default');
 
-});
-
-      $('#success-alert').hide();
-      $('#query').on('propertychange input', function (e) {
-          if($('#query').val()===''){
-            $('button.main.btn.btn-default').removeClass('selected');
-            $('button.main.btn.btn-default').addClass('disabled');
-            $('button.main.btn.btn-default').prop('disabled', true);
-          }
-          else{
-            $('button.main.btn.btn-default').removeClass('disabled');
-            $('button.main.btn.btn-default').prop('disabled', false);
-          }
-      });
-
-    $(document).on('click', 'button.btn.btn-default', function(event) {
-      $('button.btn.btn-default').removeClass('disabled');
-      $('button.btn.btn-default').prop('disabled', false);
-      $('#inputfilter').prop('disabled', false);
-
-    });
-
-    $('button#displaydb').click(function(event){
-
-      $( 'button.tables.btn.btn-default').slideToggle( "slow", function() {
-    // Animation complete.
   });
+
+  $('#success-alert').hide();
+  $('#query').on('propertychange input', function(e) {
+    if ($('#query').val() === '') {
+      $('button.main.btn.btn-default').removeClass('selected');
+      $('button.main.btn.btn-default').addClass('disabled');
+      $('button.main.btn.btn-default').prop('disabled', true);
+    } else {
+      $('button.main.btn.btn-default').removeClass('disabled');
+      $('button.main.btn.btn-default').prop('disabled', false);
+    }
+  });
+
+  $(document).on('click', 'button.btn.btn-default', function(event) {
+    $('button.btn.btn-default').removeClass('disabled');
+    $('button.btn.btn-default').prop('disabled', false);
+    $('#inputfilter').prop('disabled', false);
+
+  });
+
+  $('button#displaydb').click(function(event) {
+
+    $('button.tables.btn.btn-default').slideToggle("slow", function() {
+      // Animation complete.
     });
+  });
 
   socket.emit('load');
   socket.on('tables', function(rows) {
@@ -130,10 +131,10 @@ $(function() {
     $('button.main.btn.btn-default').prop('disabled', false);
     $('button.editTable').text('edit table');
     var format = 'JSON',
-    sql= 'select * from '+ $(this).text()+' limit 200 offset 0',
-    // sql = $('#query').val(),
-    matches = /from (.*?) /g.exec(sql),
-    res = sql.replace(matches[1], $(this).text());
+      sql = 'select * from ' + $(this).text() + ' limit 200 offset 0',
+      // sql = $('#query').val(),
+      matches = /from (.*?) /g.exec(sql),
+      res = sql.replace(matches[1], $(this).text());
     sql = res;
     $('#query').val(sql);
 
@@ -143,9 +144,9 @@ $(function() {
   // New socket connected, display new count on page
   socket.on('users connected', function(data) {
     var newstring,
-    output,
-    list,
-    addresses = [];
+      output,
+      list,
+      addresses = [];
     $('.dropdown-menu').empty();
     $.each(data, function(key, value) {
 
@@ -159,10 +160,10 @@ $(function() {
     $('#Users').html('<i class="material-icons"style="font-size:18px;">group</i>' + addresses.length);
     // $('.dropdown-menu').html('<p>'+addresses)
     // });
-    $.each(addresses, function(i){
-      $('.dropdown-menu').append('<li>'+addresses[i]+'</li>');
+    $.each(addresses, function(i) {
+      $('.dropdown-menu').append('<li>' + addresses[i] + '</li>');
 
-  });
+    });
 
   })
 
@@ -181,7 +182,7 @@ $(function() {
 
       $('.updated').each(function() {
         changes.push($(this).data('sql'));
-      //  $(this).removeAttr('sql');
+        //  $(this).removeAttr('sql');
         $(this).removeData('sql');
         $(this).removeAttr('style');
         $(this).removeClass('updated');
@@ -194,8 +195,8 @@ $(function() {
       $('td').attr('contenteditable', 'false');
       $('td').removeClass('edit');
       $("#success-alert").alert();
-      $("#success-alert").fadeTo(2000, 500).slideUp(500, function(){
-      $("#success-alert").slideUp(500);
+      $("#success-alert").fadeTo(2000, 500).slideUp(500, function() {
+        $("#success-alert").slideUp(500);
       });
       $('button.editTable').text('edit table');
     } else {
@@ -205,36 +206,36 @@ $(function() {
       $('button.editTable').html('<i class="material-icons"style="font-size:18px; color:#757575;">save</i>');
 
       $('.edit').click(function() {
-          var format = 'text',
+        var format = 'text',
           tableName = $('#query').val(),
           matches = /from (.*?) /g.exec(tableName),
           value;
-          if (matches.length > 1) {
-            var name = matches[1];
-          } else {
-            console.log('There is an error in your SQL statement');
-          }
+        if (matches.length > 1) {
+          var name = matches[1];
+        } else {
+          console.log('There is an error in your SQL statement');
+        }
 
-          socket.emit('primary', name);
-          socket.on('key', function(key) {
-            primaryKey = key;
-            $('.edit').on('input', function() {
-              $(this).css('background-color', 'orange');
-              $(this).addClass('updated');
-              var th = $('#data th').eq($(this).index()); // returns text of respective header
-              value = "'" + $(this).text() + "'";
-              if (value === "''") {
-                value = 'NULL';
-              }
-              var id = $(this).closest('tr').find('td:eq(1)').text();
-              condition = id;
-              statement = 'UPDATE ' + name + ' SET ' + th.text() + '=' + value + ' WHERE ' + primaryKey + '= ' + condition;
+        socket.emit('primary', name);
+        socket.on('key', function(key) {
+          primaryKey = key;
+          $('.edit').on('input', function() {
+            $(this).css('background-color', 'orange');
+            $(this).addClass('updated');
+            var th = $('#data th').eq($(this).index()); // returns text of respective header
+            value = "'" + $(this).text() + "'";
+            if (value === "''") {
+              value = 'NULL';
+            }
+            var id = $(this).closest('tr').find('td:eq(1)').text();
+            condition = id;
+            statement = 'UPDATE ' + name + ' SET ' + th.text() + '=' + value + ' WHERE ' + primaryKey + '= ' + condition;
             //  $(this).attr('sql', statement);
-              $(this).data('sql', statement);
+            $(this).data('sql', statement);
 
-            });
+          });
 
-          })
+        })
 
       });
     } //tohere
@@ -243,9 +244,9 @@ $(function() {
 
   $('.entireTable').click(function() {
     var format = 'text',
-    tableName = $('#query').val(),
-    matches = /from (.*?) /g.exec(tableName),
-    value;
+        tableName = $('#query').val(),
+        matches = /from (.*?) /g.exec(tableName),
+        value;
     if (matches.length > 1) {
       var name = matches[1];
 
@@ -253,65 +254,80 @@ $(function() {
       console.log('There is an error in your SQL statement');
       // Not Found
     }
-    if($('button.editTable').text()==='save'){
-      bootbox.confirm("Warning continuing before saving will discard your changes, are you sure?", function(result){
-        if(result==false){
+    if ($('button.editTable').text() === 'save') {
+      bootbox.confirm("Warning continuing before saving will discard your changes, are you sure?", function(result) {
+        if (result == false) {
           //do nothing
-        }
-        else{
+        } else {
           $('button.editTable').text('edit table');
           sql = 'select * from ' + name;
           createTableText(sql);
 
         }
       })
+    } else {
+      sql = 'select * from ' + name;
+      createTableText(sql);
     }
-    else{
-    sql = 'select * from ' + name;
-    createTableText(sql);
-  }
 
-  });//end of entireTable
+  }); //end of entireTable
 
   $('button.admin').click(function() {
-    socket.emit('authenticate', 'Blue$apph1re#2');
-    socket.on('verified', function(message) {
-      bootbox.alert(message, function(){
-      console.log(message);
-      });
-    })
-//     bootbox.prompt({
-//     title: "Authentification Required",
-//     inputType: 'password',
-//     callback: function (result) {
-//         // console.log(result);
-//         // if(result===''){
-//         //   bootbox.alert('Error: No Password', function(){
-//         //      $('button.user').click();
-//         //    });
-//         // }
-//         // else if(result==null){
-//         //   $('button.user').click();
-//         // }
-//         // else{
-//           socket.emit('authenticate', result);
-//           console.log(result);
-//           socket.on('verified', function(message) {
-//             bootbox.alert(message, function(){
-//               console.log(message);
-//              });
-//           })
-//           socket.on('exception', function(error) {
-//             // console.log(error);
-//             bootbox.alert(error, function(){
-//               //  $('button.user').click();
-//              });
-//           })
-//
-//         // }
-//         //send password to server here
-//     }
-// });
+    var password;
+    bootbox.prompt({
+    title: "Authentification Required",
+    inputType: 'password',
+    callback: function (result) {
+          console.log(result);
+          socket.emit('authenticate', result);
+          // socket.on('verified', function(message) {
+          //     bootbox.alert(message, function() {
+          //       console.log(message);
+          //     });
+          //   })
+
+    }
+});
+    // console.log(password);
+    // socket.emit('authenticate', 'Blue$apph1re#2');
+
+    // socket.on('verified', function(message) {
+    //     bootbox.alert(message, function() {
+    //       console.log(message);
+    //     });
+    //   })
+      //     bootbox.prompt({
+      //     title: "Authentification Required",
+      //     inputType: 'password',
+      //     callback: function (result) {
+      //         // console.log(result);
+      //         // if(result===''){
+      //         //   bootbox.alert('Error: No Password', function(){
+      //         //      $('button.user').click();
+      //         //    });
+      //         // }
+      //         // else if(result==null){
+      //         //   $('button.user').click();
+      //         // }
+      //         // else{
+      //           socket.emit('authenticate', result);
+      //           console.log(result);
+      //           socket.on('verified', function(message) {
+      //             bootbox.alert(message, function(){
+      //               console.log(message);
+      //              });
+      //           })
+      //           socket.on('exception', function(error) {
+      //             // console.log(error);
+      //             bootbox.alert(error, function(){
+      //               //  $('button.user').click();
+      //              });
+      //           })
+      //
+      //         // }
+      //         //send password to server here
+      //     }
+      // });
   }); //button.admin click
 
   // $('button.user').click(function(event){
@@ -408,12 +424,10 @@ $(function() {
       //create case for edit button
       if ($('button.tables').hasClass('selected')) {
         createTableText();
-      }
-      else if($('button.main').hasClass('selected')){
+      } else if ($('button.main').hasClass('selected')) {
         createTableText();
-      }
-     else {
-       createTableText();
+      } else {
+        createTableText();
 
       }
 
@@ -421,10 +435,10 @@ $(function() {
 
   });
 
-  $('button#excel').click(function(){
-    var url='data:application/vnd.ms-excel,' + encodeURIComponent($('#data').html())
-    location.href=url
+  $('button#excel').click(function() {
+    var url = 'data:application/vnd.ms-excel,' + encodeURIComponent($('#data').html())
+    location.href = url
     return false
-})
+  })
 
 });
