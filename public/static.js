@@ -278,9 +278,16 @@ $(function() {
       socket.emit('authenticate', result);
       socket.on('verified', function(message) {
           bootbox.alert(message, function() {
-
+            $( '.bootbox' ).remove();
+            $( '.modal-backdrop' ).remove();
           });
         })
+        socket.on('exception', function(message) {
+            bootbox.alert(message, function() {
+              $( '.bootbox' ).remove();
+              $( '.modal-backdrop' ).remove();
+            });
+          })
       }
     }
     function sendinfo(callback){
@@ -295,7 +302,7 @@ $(function() {
           }
         });
     }
-    
+
     sendinfo(sendpassword);
 
   }); //button.admin click
