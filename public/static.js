@@ -280,6 +280,7 @@ $(function() {
         $( '.bootbox' ).remove();
         $( '.modal-backdrop' ).remove();
           bootbox.alert(message, function() {
+            $('body').removeClass('modal-open');
             $( '.bootbox' ).remove();
             $( '.modal-backdrop' ).remove();
           });
@@ -393,7 +394,12 @@ $(function() {
     } else if (e.which === 38) { //up
       delta = -5;
     } else if (e.which === 13) { //up
+      if($('body').hasClass('modal-open')){
+
+      }
+      else{
       $('button.main.json').click();
+    }
     }
 
     if (delta) {
