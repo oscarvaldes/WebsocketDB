@@ -167,15 +167,15 @@ io.sockets.on('connection', function(socket) {
     })
 
     socket.on('authenticate', function(password) {
-      if (password === 'Blue$apph1re#2') {
-        admin = true;
-        socket.emit('verified', 'Admin Succesfully Logged In');
-      } else if (password === '' || password == null) {
-        admin = false;
-        socket.emit('exception', 'Error: No Password');
-      } else {
+      console.log(password);
+      if (password !== 'soiltest') {
         admin = false;
         socket.emit('exception', 'Error: Wrong Password');
+        // socket.emit('verified', 'Admin Succesfully Logged In');
+      }
+      else {
+        admin = true;
+        socket.emit('verified', 'Admin Succesfully Logged In');
       }
 
       console.log('admin log in attempt success: ' + admin);

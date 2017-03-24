@@ -91,7 +91,7 @@ $(function() {
     }
   });
 
-  $(document).on('click', 'button.btn.btn-default', function(event) {
+  $(document).on('click', 'button.btn.btn-default.tables', function(event) {
     $('button.btn.btn-default').removeClass('disabled');
     $('button.btn.btn-default').prop('disabled', false);
     $('#inputfilter').prop('disabled', false);
@@ -272,62 +272,32 @@ $(function() {
 
   }); //end of entireTable
 
-  $('button.admin').click(function() {
-    var password;
-    bootbox.prompt({
-    title: "Authentification Required",
-    inputType: 'password',
-    callback: function (result) {
-          console.log(result);
-          socket.emit('authenticate', result);
-          // socket.on('verified', function(message) {
-          //     bootbox.alert(message, function() {
-          //       console.log(message);
-          //     });
-          //   })
+  $('button.admin').click(function(){
+    function sendpassword(result){
+      if(result){
+      socket.emit('authenticate', result);
+      socket.on('verified', function(message) {
+          bootbox.alert(message, function() {
 
+          });
+        })
+      }
     }
-});
-    // console.log(password);
-    // socket.emit('authenticate', 'Blue$apph1re#2');
+    function sendinfo(callback){
+      bootbox.prompt({
+      title: "Authentification Required",
+      inputType: 'password',
+      callback: function (result) {
 
-    // socket.on('verified', function(message) {
-    //     bootbox.alert(message, function() {
-    //       console.log(message);
-    //     });
-    //   })
-      //     bootbox.prompt({
-      //     title: "Authentification Required",
-      //     inputType: 'password',
-      //     callback: function (result) {
-      //         // console.log(result);
-      //         // if(result===''){
-      //         //   bootbox.alert('Error: No Password', function(){
-      //         //      $('button.user').click();
-      //         //    });
-      //         // }
-      //         // else if(result==null){
-      //         //   $('button.user').click();
-      //         // }
-      //         // else{
-      //           socket.emit('authenticate', result);
-      //           console.log(result);
-      //           socket.on('verified', function(message) {
-      //             bootbox.alert(message, function(){
-      //               console.log(message);
-      //              });
-      //           })
-      //           socket.on('exception', function(error) {
-      //             // console.log(error);
-      //             bootbox.alert(error, function(){
-      //               //  $('button.user').click();
-      //              });
-      //           })
-      //
-      //         // }
-      //         //send password to server here
-      //     }
-      // });
+            if(callback){
+              callback(result);
+            }
+          }
+        });
+    }
+    
+    sendinfo(sendpassword);
+
   }); //button.admin click
 
   // $('button.user').click(function(event){
