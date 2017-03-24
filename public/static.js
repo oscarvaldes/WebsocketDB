@@ -277,13 +277,18 @@ $(function() {
       if(result){
       socket.emit('authenticate', result);
       socket.on('verified', function(message) {
+        $( '.bootbox' ).remove();
+        $( '.modal-backdrop' ).remove();
           bootbox.alert(message, function() {
             $( '.bootbox' ).remove();
             $( '.modal-backdrop' ).remove();
           });
         })
         socket.on('exception', function(message) {
+          $( '.bootbox' ).remove();
+          $( '.modal-backdrop' ).remove();
             bootbox.alert(message, function() {
+              $('body').removeClass('modal-open');
               $( '.bootbox' ).remove();
               $( '.modal-backdrop' ).remove();
             });

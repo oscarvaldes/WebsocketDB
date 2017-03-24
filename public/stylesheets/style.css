@@ -108,6 +108,9 @@ button{
 .alert.alert-success{
   /*display:none;*/
 }
+/*.modal-backdrop {
+  z-index: -1;
+}*/
 
 /*tr.header {
     position: fixed;
