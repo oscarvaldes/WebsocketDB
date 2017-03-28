@@ -114,6 +114,28 @@ $(function() {
       });
     });
   })
+  $('button.main').click(function(event) {
+
+var tableName = $('#query').val(),
+    tableName= tableName+' ',
+    matches = /from (.*?) /g.exec(tableName),
+    value;
+  if (matches.length > 1) {
+    var name = matches[1];
+    $( 'button.tables' ).each(function() {
+      $(this).css('background-color', '');
+      if($(this).text()===name){
+        $(this).css('background-color','#bfb');
+        $('button.btn.btn-default').removeClass('disabled');
+        $('button.btn.btn-default').prop('disabled', false);
+        $('#inputfilter').prop('disabled', false);
+      }
+
+    });
+  } else {
+    console.log('There is an error in your SQL statement');
+  }
+  }); //button.json click
   $('button.json').click(function(event) {
     createTableJSON();
   }); //button.json click
@@ -127,6 +149,7 @@ $(function() {
   }); //button.table click
 
   $(document).on('click', 'button.tables', function(event) {
+    $('button.tables').css('background-color','');
     $('button.main.btn.btn-default').removeClass('disabled');
     $('button.main.btn.btn-default').prop('disabled', false);
     $('button.editTable').text('edit table');
