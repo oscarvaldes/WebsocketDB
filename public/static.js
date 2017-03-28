@@ -277,6 +277,10 @@ $(function() {
       if(result){
       socket.emit('authenticate', result);
       socket.on('verified', function(message) {
+        $('button.user').removeClass('disabled');
+        $('button.user').removeAttr('disabled');
+        $('button.admin').addClass('disabled');
+        $('button.admin').attr('disabled','true');
         $( '.bootbox' ).remove();
         $( '.modal-backdrop' ).remove();
           bootbox.alert(message, function() {
@@ -286,6 +290,12 @@ $(function() {
           });
         })
         socket.on('exception', function(message) {
+          if($('button.user').hasClass( 'active' )){
+            //do nothing
+          }
+          else{
+            $('button.user').click();
+          }
           $( '.bootbox' ).remove();
           $( '.modal-backdrop' ).remove();
             bootbox.alert(message, function() {
