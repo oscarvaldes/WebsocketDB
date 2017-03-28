@@ -275,7 +275,7 @@ $(function() {
   $('button.admin').click(function(){
     function sendpassword(result){
       if(result){
-      socket.emit('authenticate', result);
+      socket.emit('authenticate', result,'admin');
       socket.on('verified', function(message) {
         $('button.user').removeClass('disabled');
         $('button.user').removeAttr('disabled');
@@ -323,9 +323,13 @@ $(function() {
 
   }); //button.admin click
 
-  // $('button.user').click(function(event){
-  //   socket.emit('authenticate');
-  // });
+  $('button.user').click(function(event){
+    $('button.admin').removeClass('disabled');
+    $('button.admin').removeAttr('disabled');
+    $('button.user').addClass('disabled');
+    $('button.user').attr('disabled','true');
+    socket.emit('authenticate','false','user');
+  });
   //FILTER CODE
   $('#inputfilter').on('input', function() {
     var RE = new RegExp($(this).val(), 'i');

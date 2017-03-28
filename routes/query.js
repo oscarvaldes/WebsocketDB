@@ -166,11 +166,16 @@ io.sockets.on('connection', function(socket) {
       });
     })
 
-    socket.on('authenticate', function(password) {
+    socket.on('authenticate', function(password,user) {
       console.log(password);
       if (password !== 'soiltest') {
         admin = false;
+        if(user==='user'){
+
+        }
+        else{
         socket.emit('exception', 'Error: Wrong Password');
+      }
         // socket.emit('verified', 'Admin Succesfully Logged In');
       }
       else {
