@@ -51,10 +51,6 @@ button.selected.tables {
   background-color: orange;
 }
 
-tr:hover {
-  outline: 1px solid black;
-}
-
 .highlight {
   background: yellow;
 }
@@ -110,6 +106,8 @@ button{
 
 tr:nth-child(1) th {
   position: relative;
+  background: #def;
+  border-bottom: groove;
 }
 
 tr:nth-child(1) th:nth-child(1) {
@@ -118,5 +116,7 @@ tr:nth-child(1) th:nth-child(1) {
 
 th:nth-child(1), td:nth-child(1) {
   position: relative;
+  background: #eee;
   z-index: 1;
+  border-right: groove;
 }

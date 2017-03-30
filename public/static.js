@@ -190,8 +190,16 @@ var tableName = $('#query').val(),
 
   })
 
+  var counter=0;
   $(document).on('click', 'button', function(event) {
+
+    if ($( 'button').hasClass( 'tables' )){
+      counter++;
+      console.log(counter);
+    }
+    else{
     $('button').removeClass('selected');
+  }
     $(this).addClass('selected');
     $('#displaydb').removeClass('selected');
     $('#Users').removeClass('selected');
