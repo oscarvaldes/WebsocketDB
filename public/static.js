@@ -466,4 +466,12 @@ var tableName = $('#query').val(),
     return false
   })
 
+  $('#data').scroll(function() {
+    var top  = $('#data').scrollTop(),
+        left = $('#data').scrollLeft();
+
+    $('tr:nth-child(1) th').css('top', top - 1);
+    $('th:nth-child(1), td:nth-child(1)').css('left', left - 1);
+  });
+
 });
