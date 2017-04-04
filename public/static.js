@@ -69,6 +69,8 @@ $(function() {
       }) //create table table
   }
 
+  $('#edit').hide();
+
   $('.btn-toggle').click(function() {
     $(this).find('.btn').toggleClass('active');
 
@@ -312,6 +314,9 @@ var tableName = $('#query').val(),
       if(result){
       socket.emit('authenticate', result,'admin');
       socket.on('verified', function(message) {
+        $('#edit').show();
+        $('#Users').removeClass('disabled');
+        $('#Users').removeAttr('disabled');
         $('button.user').removeClass('disabled');
         $('button.user').removeAttr('disabled');
         $('button.admin').addClass('disabled');
@@ -359,6 +364,9 @@ var tableName = $('#query').val(),
   }); //button.admin click
 
   $('button.user').click(function(event){
+    $('#edit').hide();
+    $('#Users').addClass('disabled');
+    $('#Users').attr('disabled','true');
     $('button.admin').removeClass('disabled');
     $('button.admin').removeAttr('disabled');
     $('button.user').addClass('disabled');
