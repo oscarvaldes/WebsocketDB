@@ -124,6 +124,7 @@ var tableName = $('#query').val(),
     var name = matches[1];
     $( 'button.tables' ).each(function() {
       $(this).css('background-color', '');
+      $(this).removeClass('selected');
       if($(this).text()===name){
         $(this).css('background-color','#bfb');
         $('button.btn.btn-default').removeClass('disabled');
