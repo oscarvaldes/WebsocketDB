@@ -149,7 +149,10 @@ var tableName = $('#query').val(),
   }); //button.table click
 
   $(document).on('click', 'button.tables', function(event) {
-    $('button.tables').css('background-color','');
+    $( 'button.tables' ).each(function() {
+    $(this).css('background-color','');
+    $(this).removeClass('selected');
+    })
     $('button.main.btn.btn-default').removeClass('disabled');
     $('button.main.btn.btn-default').prop('disabled', false);
     $('button.editTable').text('edit table');
