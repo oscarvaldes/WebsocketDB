@@ -195,8 +195,15 @@ var tableName = $('#query').val(),
     // });
     $.each(addresses, function(i) {
       $('.dropdown-menu').append('<li>' + addresses[i]+' <i class="material-icons exit" style="font-size:18px;">close</i>' + '</li>');
-
+      // $(this).data('IP', addresses[i]);
     });
+
+    $('.exit').each(function(idx, li) {
+      var IP=$(this).closest('li').text().slice(0,-6);
+      $(this).data('IP', IP);
+      console.log(IP)
+    // and the rest of your code
+});
 
   })
 
@@ -498,7 +505,9 @@ var tableName = $('#query').val(),
   // });
 
 $(document).on('click', '.exit', function(event) {
-  console.log('clicked');
+  event.stopPropagation();
+  console.log($(this).data('IP'));
+  socket.emit('adminBoot',$(this).data('IP'));
 });
 
   $('#data').scroll(function() {

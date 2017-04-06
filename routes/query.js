@@ -186,6 +186,22 @@ io.sockets.on('connection', function(socket) {
       console.log('admin log in attempt success: ' + admin);
     })
 
+    socket.on('adminBoot', function(IP) {
+
+
+      for(var i=0; i< addresses.length;i++){
+        console.log(addresses[i]);
+        if(addresses[i]===IP){
+          addresses.splice(i, 1);
+          console.log('entered')
+        }
+      }
+      socketCount--;
+      io.sockets.emit('users connected', addresses);
+      console.log(IP+' has been booted by admin');
+
+    })
+
     // Initial app start, run db query
 
   }) //connection
