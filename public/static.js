@@ -11,7 +11,7 @@ $(function() {
     var sql = sql || $('#query').val();
     var format = 'text';
     // sql = $('#query').val();
-    $('button.editTable').text('edit table');
+    $('button.editTable').html('<i class="material-icons"style="color:#757575;">edit</i>');
     socket.emit('query', sql, format);
 
     socket.on('create table text', function(data) {
@@ -31,7 +31,7 @@ $(function() {
     var sql = sql || $('#query').val();
     var format = 'JSON';
     // sql = $('#query').val();
-    $('button.editTable').text('edit table');
+    $('button.editTable').html('<i class="material-icons"style="color:#757575;">edit</i>');
     socket.emit('query', sql, format);
 
     socket.on('create table JSON', function(data) {
@@ -61,7 +61,7 @@ $(function() {
     var sql = sql || $('#query').val();
     var format = 'table';
     // sql = $('#query').val();
-    $('button.editTable').text('edit table');
+    $('button.editTable').html('<i class="material-icons"style="color:#757575;">edit</i>');
     socket.emit('query', sql, format);
 
     socket.on('create table table', function(data) {
@@ -117,7 +117,11 @@ $(function() {
     });
   })
   $('button.main').click(function(event) {
-
+    //WORKING ON SQL VALIDATOR
+    // if($('#data').length){
+    //   console.log('error');
+    //   return;
+    // }
 var tableName = $('#query').val(),
     tableName= tableName+' ',
     matches = /from (.*?) /g.exec(tableName),
@@ -158,7 +162,7 @@ var tableName = $('#query').val(),
     })
     $('button.main.btn.btn-default').removeClass('disabled');
     $('button.main.btn.btn-default').prop('disabled', false);
-    $('button.editTable').text('edit table');
+    $('button.editTable').html('<i class="material-icons"style="color:#757575;">edit</i>');
     var format = 'JSON',
       sql = 'select * from ' + $(this).text() + ' limit 200 offset 0',
       // sql = $('#query').val(),
@@ -196,12 +200,12 @@ var tableName = $('#query').val(),
 
   })
 
-  var counter=0;
+  // var counter=0;
   $(document).on('click', 'button', function(event) {
 
     if ($( 'button').hasClass( 'tables' )){
-      counter++;
-      console.log(counter);
+      // counter++;
+      // console.log(counter);
     }
     else{
     $('button').removeClass('selected');
@@ -235,7 +239,7 @@ var tableName = $('#query').val(),
       $("#success-alert").fadeTo(2000, 500).slideUp(500, function() {
         $("#success-alert").slideUp(500);
       });
-      $('button.editTable').text('edit table');
+      $('button.editTable').html('<i class="material-icons"style="color:#757575;">edit</i>');
     } else {
       $('td').attr('contenteditable', 'true');
       $('td').addClass('edit');
@@ -296,7 +300,7 @@ var tableName = $('#query').val(),
         if (result == false) {
           //do nothing
         } else {
-          $('button.editTable').text('edit table');
+          $('button.editTable').html('<i class="material-icons"style="color:#757575;">edit</i>');
           sql = 'select * from ' + name;
           createTableText(sql);
 
@@ -344,6 +348,14 @@ var tableName = $('#query').val(),
               $( '.modal-backdrop' ).remove();
             });
           })
+      }
+      else{
+        bootbox.alert('No Password', function() {
+          $('button.user').click();
+          $('body').removeClass('modal-open');
+          $( '.bootbox' ).remove();
+          $( '.modal-backdrop' ).remove();
+        });
       }
     }
     function sendinfo(callback){
