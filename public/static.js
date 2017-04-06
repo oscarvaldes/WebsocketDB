@@ -194,7 +194,7 @@ var tableName = $('#query').val(),
     // $('.dropdown-menu').html('<p>'+addresses)
     // });
     $.each(addresses, function(i) {
-      $('.dropdown-menu').append('<li>' + addresses[i] + '</li>');
+      $('.dropdown-menu').append('<li>' + addresses[i]+' <i class="material-icons exit" style="font-size:18px;">close</i>' + '</li>');
 
     });
 
@@ -350,12 +350,7 @@ var tableName = $('#query').val(),
           })
       }
       else{
-        bootbox.alert('No Password', function() {
-          $('button.user').click();
-          $('body').removeClass('modal-open');
-          $( '.bootbox' ).remove();
-          $( '.modal-backdrop' ).remove();
-        });
+         $('button.user').click();
       }
     }
     function sendinfo(callback){
@@ -496,7 +491,15 @@ var tableName = $('#query').val(),
     var url = 'data:application/vnd.ms-excel,' + encodeURIComponent($('#data').html())
     location.href = url
     return false
-  })
+  });
+
+  // $('.dropdown-menu .material-icons .exit').click(function(event) {
+  //   console.log('clicked')
+  // });
+
+$(document).on('click', '.exit', function(event) {
+  console.log('clicked');
+});
 
   $('#data').scroll(function() {
     var top  = $('#data').scrollTop(),

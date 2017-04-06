@@ -50,6 +50,10 @@ button.selected.tables {
 .edit:hover{
   background-color: orange;
 }
+.exit:hover{
+  color: red;
+  cursor: pointer;
+}
 
 .highlight {
   background: yellow;
