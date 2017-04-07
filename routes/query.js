@@ -189,16 +189,21 @@ io.sockets.on('connection', function(socket) {
     socket.on('adminBoot', function(IP) {
 
 
-      for(var i=0; i< addresses.length;i++){
+      for(var i=1; i< addresses.length;i++){
+        addresses[i]= addresses[i].replace(/::ffff:/g, '');
         console.log(addresses[i]);
         if(addresses[i]===IP){
           addresses.splice(i, 1);
-          console.log('entered')
+          socket.emit('disconnect');
+          socket.emit('clientdisconnect')
+          break;
         }
       }
-      socketCount--;
-      io.sockets.emit('users connected', addresses);
       console.log(IP+' has been booted by admin');
+      // socketCount--;
+      // addresses.length = socketCount + 2;
+      // io.sockets.emit('users connected', addresses);
+
 
     })
 

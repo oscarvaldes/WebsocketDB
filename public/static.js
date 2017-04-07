@@ -82,6 +82,7 @@ $(function() {
   });
 
   $('#success-alert').hide();
+  $('#warning-alert').hide();
   $('#query').on('propertychange input', function(e) {
     if ($('#query').val() === '') {
       $('button.main.btn.btn-default').removeClass('selected');
@@ -180,6 +181,7 @@ var tableName = $('#query').val(),
       output,
       list,
       addresses = [];
+    //  console.log(data)
     $('.dropdown-menu').empty();
     $.each(data, function(key, value) {
 
@@ -205,6 +207,11 @@ var tableName = $('#query').val(),
     // and the rest of your code
 });
 
+  })
+
+  socket.on('clientdisconnect',function(data){
+    socket.disconnect();
+    $('#warning-alert').show();
   })
 
   // var counter=0;
