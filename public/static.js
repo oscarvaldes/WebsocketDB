@@ -175,6 +175,8 @@ var tableName = $('#query').val(),
     createTableJSON();
   });
 
+  //socket.emit('join', {email: user1@example.com}); THIS IS WHERE I AM
+
   // New socket connected, display new count on page
   socket.on('users connected', function(data) {
     var newstring,
