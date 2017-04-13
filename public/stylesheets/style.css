@@ -38,7 +38,7 @@ tr:nth-child(even) {
 }
 
 #query {
-  width: 40em;
+  width: 25vh;
 }
 
 button.selected.tables.btn-default {
@@ -75,26 +75,28 @@ button.selected.tables {
   transform: translate(-50%, 0);
 }
 #main{
-  padding-left:22vh;
-  padding-right:22vh;
+  /*padding-left:22vh;
+  padding-right:22vh;*/
 }
 #sidebar{
-  width: 20vh;
+  /*width: 20vh;*/
   height: 75vh;
-  overflow: auto;
+  overflow-y: auto;
   float:left;
   margin-left: .5em;
-}
-#tools{
-  width: 20vh;
-  float:right;
   margin-right: .5em;
 }
+#tools{
+  /*width: 20vh;*/
+  float:right;
+  margin-right: .5em;
+  margin-left: .5em;
+}
 #displaydb{
-  width: 20vh;
+  /*width: 20vh;*/
 }
 #inputfilter{
-  width: 20vh;
+  /*width: 20vh;*/
   height: 35px;
   padding-right: 0px;
 }

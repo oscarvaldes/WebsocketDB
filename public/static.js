@@ -1,6 +1,6 @@
 $(function() {
   // Connect to our node/websockets server
-  var socket = io.connect('http://soiltest:8080');
+  var socket = io.connect('http://aesl.ces.uga.edu:8080/');
   var statement,
     primaryKey,
     answer = 0,
@@ -205,7 +205,7 @@ var tableName = $('#query').val(),
     $('.exit').each(function(idx, li) {
       var IP=$(this).closest('li').text().slice(0,-6);
       $(this).data('IP', IP);
-      console.log(IP)
+      // console.log(IP)
     // and the rest of your code
 });
 
