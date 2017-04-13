@@ -204,7 +204,7 @@ io.sockets.on('connection', function(socket) {
       for (var i in io.sockets.connected) {
           var s = io.sockets.connected[i];
           if (s.id === IP) {
-            console.log(s.id+' IT WORKED!!')
+            // console.log(s.id+' IT WORKED!!')
             s.emit('clientdisconnect');
             console.log(IP+' has been booted by admin');
              break;
