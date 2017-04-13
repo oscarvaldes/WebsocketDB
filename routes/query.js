@@ -206,29 +206,11 @@ io.sockets.on('connection', function(socket) {
           if (s.id === IP) {
             console.log(s.id+' IT WORKED!!')
             s.emit('clientdisconnect');
+            console.log(IP+' has been booted by admin');
              break;
           }
 
       }
-
-    //  socket.emit('notify_user_state', s.notify_user_state_data);
-
-      // for(var i=1; i< addresses.length;i++){
-      //   // addresses[i]= addresses[i].replace(/::ffff:/g, '');
-      //   // console.log(addresses[i]);
-      //   if(addresses[i]===IP){
-      //   //  addresses.splice(i, 1);
-      //   //  socket.emit('disconnect');
-      //     //io.sockets.socket(p.socket).emit('correct', data);
-      //     socket.emit('clientdisconnect');
-      //     break;
-      //   }
-      // }
-      console.log(IP+' has been booted by admin');
-      // socketCount--;
-      // addresses.length = socketCount + 2;
-      // io.sockets.emit('users connected', addresses);
-
 
     })
 
