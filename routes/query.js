@@ -109,8 +109,11 @@ io.sockets.on('connection', function(socket) {
     // Socket has connected, increase socket count
     socketCount++
     addresses.length = socketCount;
+
     //console.log(socket.handshake.address);
     addresses.push(socket.handshake.address);
+    socket.id=(socket.handshake.address).replace(/::ffff:/g, '');
+    // console.log(socket.id)
     // Let all sockets know how many are connected
     //io.sockets.emit('users connected', socketCount)
     io.sockets.emit('users connected', addresses)
@@ -119,7 +122,18 @@ io.sockets.on('connection', function(socket) {
       // Decrease the socket count on a disconnect, emit
       socketCount--
       addresses.length = socketCount + 1;
-      io.sockets.emit('users connected', addresses)
+
+      for(var i=1; i< addresses.length;i++){
+        addresses[i]= addresses[i].replace(/::ffff:/g, '');
+        console.log(addresses[i]);
+        if(addresses[i]===IP){
+        addresses.splice(i, 1);
+        // socket.emit('disconnect');
+          // socket.emit('clientdisconnect');
+          break;
+        }
+      }
+        io.sockets.emit('users connected', addresses)
     })
 
     socket.on('query', function(sql, format) {
@@ -187,18 +201,29 @@ io.sockets.on('connection', function(socket) {
     })
 
     socket.on('adminBoot', function(IP) {
+      for (var i in io.sockets.connected) {
+          var s = io.sockets.connected[i];
+          if (s.id === IP) {
+            console.log(s.id+' IT WORKED!!')
+            s.emit('clientdisconnect');
+             break;
+          }
 
-
-      for(var i=1; i< addresses.length;i++){
-        addresses[i]= addresses[i].replace(/::ffff:/g, '');
-        console.log(addresses[i]);
-        if(addresses[i]===IP){
-          addresses.splice(i, 1);
-          socket.emit('disconnect');
-          socket.emit('clientdisconnect');
-          break;
-        }
       }
+
+    //  socket.emit('notify_user_state', s.notify_user_state_data);
+
+      // for(var i=1; i< addresses.length;i++){
+      //   // addresses[i]= addresses[i].replace(/::ffff:/g, '');
+      //   // console.log(addresses[i]);
+      //   if(addresses[i]===IP){
+      //   //  addresses.splice(i, 1);
+      //   //  socket.emit('disconnect');
+      //     //io.sockets.socket(p.socket).emit('correct', data);
+      //     socket.emit('clientdisconnect');
+      //     break;
+      //   }
+      // }
       console.log(IP+' has been booted by admin');
       // socketCount--;
       // addresses.length = socketCount + 2;
