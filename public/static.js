@@ -208,11 +208,12 @@ var tableName = $('#query').val(),
       // console.log(IP)
     // and the rest of your code
 });
-
+    console.log(addresses);
   })
 
   socket.on('clientdisconnect',function(data){
     socket.disconnect();
+    console.log('DISCONNECT');
     $('#warning-alert').show();
   })
 
