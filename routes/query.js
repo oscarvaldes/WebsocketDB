@@ -133,12 +133,14 @@ io.sockets.on('connection', function(socket) {
       for(var i=0;i<addresses.length;i++){
       if(globalIP===addresses[i]){
         addresses.splice(i, 1);
+        socketarray.splice(i,1);
         break;
 
       }
       if(globalIP==='none'){
         if(addresses[i]===socket.id){
           addresses.splice(i,1);
+          socketarray.splice(i,1);
           break;
         }
       }
@@ -146,43 +148,6 @@ io.sockets.on('connection', function(socket) {
       console.log(addresses);
       globalIP='none';
       io.sockets.emit('users connected', addresses)
-      // if(globalIP==='::ffff:'){
-      //   for(var i=0; i< addresses.length;i++){
-      //     if(typeof addresses[i] == 'undefined'){
-      //       addresses.splice(i, 1);
-      //       console.log('deleted undefined')
-      //     }
-      //     if(addresses[i].replace(/::ffff:/g, '')==socket.id){
-      //       console.log('ENTERED!!!');
-      //       addresses.splice(i, 1);
-      //       io.sockets.emit('users connected', addresses);
-      //     }
-      //   }
-      //   console.log(socket.id);
-      //   console.log('do nothing');
-      //   //do nothing
-      // }
-      // else{
-      //   for(var i=0; i< addresses.length;i++){
-      //     if(typeof addresses[i] == 'undefined'){
-      //       addresses.splice(i, 1);
-      //     }
-      //     // addresses[i]= addresses[i].replace(/::ffff:/g, '');
-      //     console.log('current '+addresses[i]);
-      //     console.log(globalIP);
-      //     if(addresses[i].replace(/::ffff:/g, '')===globalIP){
-      //       console.log('Before: '+addresses.length);
-      //       addresses.splice(i, 1);
-      //       console.log(addresses);
-      //       console.log('After: '+addresses.length);
-      //     // socket.emit('disconnect');
-      //       // socket.emit('clientdisconnect');
-      //       globalIP='::ffff:';
-      //       break;
-      //     }
-      //   }
-      // }
-      //addresses.length = socketCount + 2;
 
     })
 
@@ -260,7 +225,7 @@ io.sockets.on('connection', function(socket) {
             console.log('globalIP: '+globalIP);
             // io.sockets.connected.splice(i,1);
             s.emit('clientdisconnect');
-            socketarray.splice(i,1);
+            //socketarray.splice(i,1);
             console.log(IP+' has been booted by admin');
         //    console.log(socketCount);
         //    console.log(socketIO.engine.clientsCount);
