@@ -208,7 +208,7 @@ var tableName = $('#query').val(),
       // console.log(IP)
     // and the rest of your code
 });
-    console.log(addresses);
+  //  console.log(addresses);
   })
 
   socket.on('clientdisconnect',function(data){

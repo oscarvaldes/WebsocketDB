@@ -8,7 +8,7 @@ var express = require('express'),
   tableName,
   connection,
   admin = false,
-  globalIP='::ffff:';
+  globalIP='none';
 var io = require('socket.io').listen(8080);
 
 router.use(bodyParser.urlencoded({
@@ -104,7 +104,8 @@ function json(rows, fields) {
 var notes = [],
   initialNotes = false,
   socketCount = 0,
-  addresses = [];
+  addresses = [],
+  socketarray=[];
 
 io.sockets.on('connection', function(socket) {
     // Socket has connected, increase socket count
@@ -113,8 +114,13 @@ io.sockets.on('connection', function(socket) {
 
     //console.log(socket.handshake.address);
     addresses.push(socket.handshake.address);
+      for(var i=0; i< addresses.length;i++){
+        addresses[i]= addresses[i].replace(/::ffff:/g, '');
+        }
     //addresses.splice(0,1);
     socket.id=(socket.handshake.address).replace(/::ffff:/g, '');
+    socketarray.push(socket);
+    //console.log(socketarray.length);
     // console.log(socket.id)
     // Let all sockets know how many are connected
     //io.sockets.emit('users connected', socketCount)
@@ -124,44 +130,60 @@ io.sockets.on('connection', function(socket) {
       // Decrease the socket count on a disconnect, emit
       //var current;
       socketCount--;
+      for(var i=0;i<addresses.length;i++){
+      if(globalIP===addresses[i]){
+        addresses.splice(i, 1);
+        break;
 
-      if(globalIP==='::ffff:'){
-        for(var i=0; i< addresses.length;i++){
-          if(typeof addresses[i] == 'undefined'){
-            addresses.splice(i, 1);
-          }
-          if(addresses[i]==socket.id){
-            console.log('ENTERED!!!');
-            addresses.splice(i, 1);
-            io.sockets.emit('users connected', addresses);
-          }
-        }
-        console.log(socket.id);
-        console.log('do nothing');
-        //do nothing
       }
-      else{
-        for(var i=0; i< addresses.length;i++){
-          if(typeof addresses[i] == 'undefined'){
-            addresses.splice(i, 1);
-          }
-          // addresses[i]= addresses[i].replace(/::ffff:/g, '');
-          console.log('current '+addresses[i]);
-          console.log(globalIP);
-          if(addresses[i]===globalIP){
-            console.log('Before: '+addresses.length);
-            addresses.splice(i, 1);
-            console.log(addresses);
-            console.log('After: '+addresses.length);
-          // socket.emit('disconnect');
-            // socket.emit('clientdisconnect');
-            globalIP='none';
-            break;
-          }
+      if(globalIP==='none'){
+        if(addresses[i]===socket.id){
+          addresses.splice(i,1);
+          break;
         }
       }
-      //addresses.length = socketCount + 2;
+    }
+      console.log(addresses);
+      globalIP='none';
       io.sockets.emit('users connected', addresses)
+      // if(globalIP==='::ffff:'){
+      //   for(var i=0; i< addresses.length;i++){
+      //     if(typeof addresses[i] == 'undefined'){
+      //       addresses.splice(i, 1);
+      //       console.log('deleted undefined')
+      //     }
+      //     if(addresses[i].replace(/::ffff:/g, '')==socket.id){
+      //       console.log('ENTERED!!!');
+      //       addresses.splice(i, 1);
+      //       io.sockets.emit('users connected', addresses);
+      //     }
+      //   }
+      //   console.log(socket.id);
+      //   console.log('do nothing');
+      //   //do nothing
+      // }
+      // else{
+      //   for(var i=0; i< addresses.length;i++){
+      //     if(typeof addresses[i] == 'undefined'){
+      //       addresses.splice(i, 1);
+      //     }
+      //     // addresses[i]= addresses[i].replace(/::ffff:/g, '');
+      //     console.log('current '+addresses[i]);
+      //     console.log(globalIP);
+      //     if(addresses[i].replace(/::ffff:/g, '')===globalIP){
+      //       console.log('Before: '+addresses.length);
+      //       addresses.splice(i, 1);
+      //       console.log(addresses);
+      //       console.log('After: '+addresses.length);
+      //     // socket.emit('disconnect');
+      //       // socket.emit('clientdisconnect');
+      //       globalIP='::ffff:';
+      //       break;
+      //     }
+      //   }
+      // }
+      //addresses.length = socketCount + 2;
+
     })
 
     socket.on('query', function(sql, format) {
@@ -229,13 +251,19 @@ io.sockets.on('connection', function(socket) {
     })
 
     socket.on('adminBoot', function(IP) {
-      for (var i in io.sockets.connected) {
-          var s = io.sockets.connected[i];
+      for (var i in socketarray) {
+          var s = socketarray[i];
+          console.log('test: '+s.id);
           if (s.id === IP) {
-            globalIP+=IP;
+            globalIP=IP;
             // console.log(s.id+' IT WORKED!!')
+            console.log('globalIP: '+globalIP);
+            // io.sockets.connected.splice(i,1);
             s.emit('clientdisconnect');
+            //s.disconnect(true);
             console.log(IP+' has been booted by admin');
+        //    console.log(socketCount);
+        //    console.log(socketIO.engine.clientsCount);
              break;
           }
 
