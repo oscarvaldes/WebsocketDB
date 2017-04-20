@@ -260,7 +260,7 @@ io.sockets.on('connection', function(socket) {
             console.log('globalIP: '+globalIP);
             // io.sockets.connected.splice(i,1);
             s.emit('clientdisconnect');
-            //s.disconnect(true);
+            socketarray.splice(i,1);
             console.log(IP+' has been booted by admin');
         //    console.log(socketCount);
         //    console.log(socketIO.engine.clientsCount);
