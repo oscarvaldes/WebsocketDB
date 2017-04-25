@@ -1,16 +1,16 @@
 # WebsocketDB
-WebsocketDB is an easy-to-use alternative to the standard MySQL Workbench. This application works on any modern browser that supports websockets, and was developed specifically for in-house use; however, that can easily be manipulated.
+WebsocketDB is an easy-to-use alternative to the standard MySQL Workbench. This application works on any modern browser that supports web sockets, and was developed specifically for in-house use; however, that can easily be manipulated.
 ## Overview
 
   - Node express application
-  - front end is built with jquery and bootsrap
+  - front end is built with jQuery and bootstrap
   - back end uses Socket.io
   - for best performance use pm2.keymetrics.io to serve application as a service to your server
 
 
 Current Functionality:
   - log in as either a regular user(default) or as an admin which determines what you can do
-  - type in sql statements and get approprtiate output using either JSON,pipe dilimeted text,or a table from the server
+  - type in sql statements and get appropriate output using either JSON, pipe delimited text, or a table from the server
   - as an admin you can edit tables using the user interface
   - filter tables with a search
   - export tables to excel
@@ -23,7 +23,7 @@ Current Functionality:
 
 Websocket WB uses a number of open source projects to work properly:
 
-* [Socket.io] - featurning the fastest and most reliable real-time engine
+* [Socket.io] - featuring the fastest and most reliable real-time engine
 * [Twitter Bootstrap] - great UI boilerplate for modern web apps
 * [node.js] - evented I/O for the backend
 * [Express] - fast node.js network app framework [@tjholowaychuk]
@@ -57,8 +57,8 @@ $ pm2 status //check basic app statistics run time, PID, up/down
  - replace the IP's in admin functionality with client names if available
  - save edits to local storage when down or up key is pressed, so that changes or discarded changes only occur when the user presses save/cancel (works with scroll bc query to server is not being made)
  - sql error handling
- - do not allow users to update,delete, or alter tables/db through sql statements
- - optimize app speed for signficantly large tables (look into nginx for caching, or other caching/local storage options)
+ - do not allow users to update, delete, or alter tables/db through sql statements
+ - optimize app speed for significantly large tables (look into nginx for caching, or other caching/local storage options)
  - add a chat functionality, so that users can communicate with admin
 
 License
