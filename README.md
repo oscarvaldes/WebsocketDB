@@ -19,7 +19,7 @@ Current Functionality:
   - on the left-hand side you have a simple UI of all the tables in the current database (click to view)
   - display an entire table from the UI (may be slow if table is significantly large)
 
-### Tech
+### Software Stack
 
 Websocket WB uses a number of open source projects to work properly:
 
@@ -28,6 +28,7 @@ Websocket WB uses a number of open source projects to work properly:
 * [node.js] - evented I/O for the backend
 * [Express] - fast node.js network app framework [@tjholowaychuk]
 * [jQuery] - Making my life easier
+* [MySQL] - duh
 
 ### Installation
 
@@ -78,3 +79,4 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
    [jQuery]: <http://jquery.com>
    [@tjholowaychuk]: <http://twitter.com/tjholowaychuk>
    [express]: <http://expressjs.com>
+   [MySQL]:<https://www.mysql.com/>
