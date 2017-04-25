@@ -1,5 +1,5 @@
-# Websocket Workbench
-Websocket WB is an easy-to-use alternative to the standard MySQL Workbench. This application works on any modern browser that supports websockets, and was developed specifically for in-house use; however, that can easily be manipulated.
+# WebsocketDB
+WebsocketDB is an easy-to-use alternative to the standard MySQL Workbench. This application works on any modern browser that supports websockets, and was developed specifically for in-house use; however, that can easily be manipulated.
 ## Overview
 
   - Node express application
@@ -38,7 +38,7 @@ Install the dependencies and devDependencies and start the server.
 ```sh
 $ cd WebsocketDB
 $ npm install -d
-$ node app.js 
+$ node app.js
 ```
 
 For production environments...using pm2
