@@ -23,5 +23,5 @@
     "socket.io": "^1.7.1"
   },
   "author": "Oscar Valdes",
-  "license": "ISC"
+  "license": "MIT"
 }
