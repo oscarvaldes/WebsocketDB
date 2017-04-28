@@ -32,7 +32,7 @@ Websocket WB uses a number of open source projects to work properly:
 
 ### Installation
 
-Websocket WB requires [Node.js](https://nodejs.org/) v4+ to run.
+WebsocketDB requires [Node.js](https://nodejs.org/) v4+ to run.
 
 Install the dependencies and devDependencies and start the server.
 
