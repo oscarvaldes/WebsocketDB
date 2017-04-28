@@ -21,7 +21,7 @@ Current Functionality:
 
 ### Software Stack
 
-Websocket WB uses a number of open source projects to work properly:
+WebsocketDB uses a number of open source projects to work properly:
 
 * [Socket.io] - featuring the fastest and most reliable real-time engine
 * [Twitter Bootstrap] - great UI boilerplate for modern web apps
