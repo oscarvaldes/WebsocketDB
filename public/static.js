@@ -25,6 +25,7 @@ $(function() {
         rows.shift();
         s += '<tr><td>' + rows.join('<tr><td>').replace(/\|/g, '<td>');
         $('#data').html(s);
+        $("#data table th:last-child, #data table td:last-child").remove();//remove extraneous last column 
         $('#data table').find('th').each(function(key, val) {
       //    $(this).html($(this).text() + '<i class="material-icons"style="font-size:18px;">swap_vert</i>');
           $(this).data('Index', counter);
@@ -105,8 +106,6 @@ $(function() {
         $('#data').html(data);
         $('#data table').find('th').each(function(key, val) {
           $(this).html($(this).text());
-      //    $(this).html($(this).text() + '<i class="material-icons"style="font-size:18px;">swap_vert</i>');
-          //$(this).removeClass('arrow');
           $(this).data('Index', counter);
           counter++;
           $(this).click(function() {
