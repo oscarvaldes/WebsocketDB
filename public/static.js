@@ -13,7 +13,8 @@ $(function() {
   function createTableText(sql) {
     var sql = sql || $('#query').val();
     var format = 'text',
-        counter = 0;
+        counter = 0,
+        toggled=false;
     // sql = $('#query').val();
     $('button.editTable').html('<i class="material-icons"style="color:#757575;">edit</i>');
     socket.emit('query', sql, format);
@@ -25,11 +26,21 @@ $(function() {
         s += '<tr><td>' + rows.join('<tr><td>').replace(/\|/g, '<td>');
         $('#data').html(s);
         $('#data table').find('th').each(function(key, val) {
-          $(this).html($(this).text() + '<i class="material-icons"style="font-size:18px;">swap_vert</i>');
+      //    $(this).html($(this).text() + '<i class="material-icons"style="font-size:18px;">swap_vert</i>');
           $(this).data('Index', counter);
           counter++;
           $(this).click(function() {
-            console.log('it worked');
+            if(toggled==false){
+              $('i').remove('.down');
+              $(this).append('<i class="material-icons up"style="font-size:18px;">keyboard_arrow_up</i>');
+              toggled=true;
+            }
+            else{
+              $('i').remove('.up');
+              $(this).append('<i class="material-icons down"style="font-size:18px;">keyboard_arrow_down</i>');
+              toggled=false;
+            }
+          //  console.log('it worked');
             sortTable($(this).data('Index'));
           });
         });
@@ -39,7 +50,8 @@ $(function() {
   function createTableJSON(sql) {
     var sql = sql || $('#query').val();
     var format = 'JSON',
-        counter = 0;
+        counter = 0,
+        toggled = false;
     // sql = $('#query').val();
     $('button.editTable').html('<i class="material-icons"style="color:#757575;">edit</i>');
     socket.emit('query', sql, format);
@@ -60,11 +72,21 @@ $(function() {
         s += '</table>';
         $('#data').html(s);
         $('#data table').find('th').each(function(key, val) {
-          $(this).html($(this).text() + '<i class="material-icons"style="font-size:18px;">swap_vert</i>');
           $(this).data('Index', counter);
           counter++;
           $(this).click(function() {
-            console.log('it worked');
+            if(toggled==false){
+              $('i').remove('.down');
+              $(this).append('<i class="material-icons up"style="font-size:18px;">keyboard_arrow_up</i>');
+              toggled=true;
+            }
+            else{
+              $('i').remove('.up');
+              $(this).append('<i class="material-icons down"style="font-size:18px;">keyboard_arrow_down</i>');
+              toggled=false;
+            }
+          //  console.log('it worked');
+
             sortTable($(this).data('Index'));
           });
         });
@@ -74,18 +96,31 @@ $(function() {
   function createTableTable(sql) {
     var sql = sql || $('#query').val();
     var format = 'table',
-        counter = 0;
+        counter = 0,
+        toggled= false;
 
     $('button.editTable').html('<i class="material-icons"style="color:#757575;">edit</i>');
     socket.emit('query', sql, format);
     socket.on('create table table', function(data) {
         $('#data').html(data);
         $('#data table').find('th').each(function(key, val) {
-          $(this).html($(this).text() + '<i class="material-icons"style="font-size:18px;">swap_vert</i>');
+          $(this).html($(this).text());
+      //    $(this).html($(this).text() + '<i class="material-icons"style="font-size:18px;">swap_vert</i>');
+          //$(this).removeClass('arrow');
           $(this).data('Index', counter);
           counter++;
           $(this).click(function() {
-            console.log('it worked');
+            if(toggled==false){
+              $('i').remove('.down');
+              $(this).append('<i class="material-icons up"style="font-size:18px;">keyboard_arrow_up</i>');
+              toggled=true;
+            }
+            else{
+              $('i').remove('.up');
+              $(this).append('<i class="material-icons down"style="font-size:18px;">keyboard_arrow_down</i>');
+              toggled=false;
+            }
+          //  console.log('it worked');
             sortTable($(this).data('Index'));
           });
         });
