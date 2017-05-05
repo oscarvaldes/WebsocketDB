@@ -1,7 +1,6 @@
 # WebsocketDB
 WebsocketDB is an easy-to-use alternative to the standard MySQL Workbench. This application works on any modern browser that supports web sockets, and was developed specifically for in-house use; however, that can easily be manipulated.
 ## Overview
-
   - Node express application
   - front end is built with jQuery and bootstrap
   - back end uses Socket.io
