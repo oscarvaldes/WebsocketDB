@@ -13,6 +13,7 @@ $(function() {
   function createTableText(sql) {
     var sql = sql || $('#query').val();
     var format = 'text';
+    var counter=0;
     // sql = $('#query').val();
     $('button.editTable').html('<i class="material-icons"style="color:#757575;">edit</i>');
     socket.emit('query', sql, format);
@@ -28,8 +29,12 @@ $(function() {
         $('#data').html(s);
 
         $('#data table').find('th').each(function (key, val) {
+          $(this).html($(this).text()+'<i class="material-icons"style="font-size:18px;">swap_vert</i>');
+          $(this).data('Index', counter);
+          counter++;
           $(this).click(function(){
             console.log('it worked');
+            sortTable($(this).data('Index'));
           });
       });
       }) //create table text
@@ -38,8 +43,7 @@ $(function() {
   function createTableJSON(sql) {
     var sql = sql || $('#query').val();
     var format = 'JSON';
-    var counter=1;
-    var sorting=[];
+    var counter=0;
     // sql = $('#query').val();
     $('button.editTable').html('<i class="material-icons"style="color:#757575;">edit</i>');
     socket.emit('query', sql, format);
@@ -69,6 +73,7 @@ $(function() {
           counter++;
           $(this).click(function(){
             console.log('it worked');
+            sortTable($(this).data('Index'));
 
           });
       });
@@ -80,6 +85,7 @@ $(function() {
   function createTableTable(sql) {
     var sql = sql || $('#query').val();
     var format = 'table';
+    var counter=0;
     // sql = $('#query').val();
     $('button.editTable').html('<i class="material-icons"style="color:#757575;">edit</i>');
     socket.emit('query', sql, format);
@@ -93,10 +99,50 @@ $(function() {
           counter++;
           $(this).click(function(){
             console.log('it worked');
+            sortTable($(this).data('Index'));
+
           });
       });
       }) //create table table
   }
+
+  function sortTable(n) {
+  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+  table = document.getElementById("data");
+  switching = true;
+  dir = "asc";
+  while (switching) {
+    switching = false;
+    rows = table.getElementsByTagName("TR");
+    for (i = 1; i < (rows.length - 1); i++) {
+      shouldSwitch = false;
+      x = rows[i].getElementsByTagName("TD")[n];
+      y = rows[i + 1].getElementsByTagName("TD")[n];
+      if (dir == "asc") {
+        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+          
+          shouldSwitch= true;
+          break;
+        }
+      } else if (dir == "desc") {
+        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+          shouldSwitch= true;
+          break;
+        }
+      }
+    }
+    if (shouldSwitch) {
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+      switchcount ++;
+    } else {
+      if (switchcount == 0 && dir == "asc") {
+        dir = "desc";
+        switching = true;
+      }
+    }
+  }
+}
 
   $('#edit').hide();
 
@@ -471,10 +517,6 @@ var tableName = $('#query').val(),
     location.href = url
     return false
   });
-
-  // $('.dropdown-menu .material-icons .exit').click(function(event) {
-  //   console.log('clicked')
-  // });
 
 $(document).on('click', '.exit', function(event) {
   event.stopPropagation();
