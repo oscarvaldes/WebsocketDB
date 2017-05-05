@@ -69,14 +69,6 @@ $(function() {
           counter++;
           $(this).click(function(){
             console.log('it worked');
-          //   var output;
-          //   output='td:nth-child('+$(this).data('Index').toString()+')';
-          // //  console.log(output);
-          // console.log($(this).text());
-          // //console.log($('button.selected').text());
-          // sql='select *from '+$('button.selected').text()+' order by '+$(this).text()+' limit 200 offset 0';
-          // $('#query').val(sql);
-          // createTableJSON(sql);
 
           });
       });
@@ -156,10 +148,6 @@ $(function() {
   })
   $('button.main').click(function(event) {
     //WORKING ON SQL VALIDATOR
-    // if($('#data').length){
-    //   console.log('error');
-    //   return;
-    // }
 var tableName = $('#query').val(),
     tableName= tableName+' ',
     matches = /from (.*?) /g.exec(tableName),
@@ -212,8 +200,6 @@ var tableName = $('#query').val(),
     createTableJSON();
   });
 
-  //socket.emit('join', {email: user1@example.com}); THIS IS WHERE I AM
-
   // New socket connected, display new count on page
   socket.on('users connected', function(data) {
     var newstring,
@@ -230,22 +216,17 @@ var tableName = $('#query').val(),
         addresses.push(output);
       }
     });
-    // $('#usersConnected').html('Users Connected:' + addresses.length);
+
     $('#Users').html('<i class="material-icons"style="font-size:18px;">group</i>' + addresses.length);
-    // $('.dropdown-menu').html('<p>'+addresses)
-    // });
     $.each(addresses, function(i) {
       $('.dropdown-menu').append('<li>' + addresses[i]+' <i class="material-icons exit" style="font-size:18px;">close</i>' + '</li>');
-      // $(this).data('IP', addresses[i]);
     });
 
     $('.exit').each(function(idx, li) {
       var IP=$(this).closest('li').text().slice(0,-6);
       $(this).data('IP', IP);
-      // console.log(IP)
-    // and the rest of your code
 });
-  //  console.log(addresses);
+
   })
 
   socket.on('clientdisconnect',function(data){
@@ -254,12 +235,11 @@ var tableName = $('#query').val(),
     $('#warning-alert').show();
   })
 
-  // var counter=0;
+
   $(document).on('click', 'button', function(event) {
 
     if ($( 'button').hasClass( 'tables' )){
-      // counter++;
-      // console.log(counter);
+
     }
     else{
     $('button').removeClass('selected');
@@ -277,13 +257,12 @@ var tableName = $('#query').val(),
 
       $('.updated').each(function() {
         changes.push($(this).data('sql'));
-        //  $(this).removeAttr('sql');
         $(this).removeData('sql');
         $(this).removeAttr('style');
         $(this).removeClass('updated');
 
       });
-      //console.log(changes.toString());
+
       socket.emit('update', changes);
       changes = [];
       statement = '';
@@ -297,7 +276,6 @@ var tableName = $('#query').val(),
     } else {
       $('td').attr('contenteditable', 'true');
       $('td').addClass('edit');
-      //$('button.editTable').text('Save');
       $('button.editTable').html('<i class="material-icons"style="font-size:18px; color:#757575;">save</i>');
 
       $('.edit').click(function() {
@@ -325,7 +303,6 @@ var tableName = $('#query').val(),
             var id = $(this).closest('tr').find('td:eq(1)').text();
             condition = id;
             statement = 'UPDATE ' + name + ' SET ' + th.text() + '=' + value + ' WHERE ' + primaryKey + '= ' + condition;
-            //  $(this).attr('sql', statement);
             $(this).data('sql', statement);
 
           });
@@ -434,7 +411,7 @@ var tableName = $('#query').val(),
     $('button.user').attr('disabled','true');
     socket.emit('authenticate','false','user');
   });
-  //FILTER CODE
+  //FILTER CODE (This is an in-house filter function! Will only work on our server.)
   $('#inputfilter').on('input', function() {
     var RE = new RegExp($(this).val(), 'i');
 
@@ -445,60 +422,8 @@ var tableName = $('#query').val(),
       $('#data td').filter(RE).addClass('highlight');
     }
     return;
-    // if($('#data tr').filter(RE).show()){
-    //   $('td').each(function() {
-    //     if($(this).html().match(RE)){
-    //     $(this).css('background-color','yellow');
-    //   }
-    //   else{
-    //     $(this).removeAttr('style');
-    //   }
-    //   });
-    // }
+
   });
-  //   var iteration=0;
-  //   $('#inputfilter').keyup(function(){
-  //   filter = new RegExp($(this).val(),'i');
-  //   $('#data tr').filter(function(){
-  //     $(this).each(function(){
-  //       found = false;
-  //       $(this).children().each(function(){
-  //         content = $(this).html();
-  //         // if(content.match(filter))
-  //         // {
-  //           if(filter.toString()==='/(?:)/i'){
-  //             $(this).removeAttr('style');
-  //           }
-  //           else if(content.match(filter)){
-  //           found = true
-  //           $(this).css('background-color','yellow');
-  //           // console.log($(this).text());
-  //         }
-  //       //  }
-  //         else{
-  //           $(this).removeAttr('style');
-  //         }
-  //       });
-  //       if(!found)
-  //       {
-  //         if($(this).children().prop('tagName')==='TH'){
-  //           //do nothing
-  //         }
-  //         else if(filter.toString()==='/(?:)/i'){
-  //           $(this).show();
-  //         }
-  //         else{
-  //         $(this).hide();
-  //       }
-  //       }
-  //       else
-  //       {
-  //         $(this).show();
-  //       }
-  //     });
-  //   });
-  // });
-  //END OF FILTER
 
   $(document).keydown(function(e) {
     var delta;
