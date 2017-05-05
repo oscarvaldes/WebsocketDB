@@ -126,3 +126,6 @@ th:nth-child(1), td:nth-child(1) {
   z-index: 1;
   border-right: groove;
 }
+th:hover{
+  cursor: pointer;
+}
