@@ -46,6 +46,7 @@ tr:nth-child(even) {
 }
 
 #query {
+  display: none;
   width: 50vh;
 }
 
@@ -89,8 +90,7 @@ button.selected.tables {
 }
 
 #main{
-  /*padding-left:22vh;
-  padding-right:22vh;*/
+
 }
 
 #sidebar{
@@ -125,6 +125,7 @@ button {
 
 .btn.main{
   border-color:#A9A9A9;
+  display: none;
 }
 
 .btn.main:hover{

@@ -9,7 +9,7 @@ var express = require('express'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     cors = require('cors'),
-    home = require('./routes/query'),
+    home = require('./routes/backend'),
     app = express();
 
 app.use(cors());
@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/query', home);
+app.use('/backend', home);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

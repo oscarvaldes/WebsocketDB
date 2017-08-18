@@ -6,6 +6,8 @@ $(function() {
   function socketEvents() {
     socket.on('verified', function(message) { //Admin login success
       $('#edit').show();
+      $('#query').show();
+      $('.main').show();
 
       $('#Users, button.user').removeClass('disabled');
       $('#Users, button.user').prop('disabled', false);
@@ -24,6 +26,7 @@ $(function() {
     socket.on('exception', function(message) { //Admin login failed
       if(!$('button.user').hasClass('active')) {
         $('button.user').click();
+        $('button.admin').removeClass('selected');
       }
 
       $('.bootbox, .modal-backdrop').remove();
@@ -31,6 +34,7 @@ $(function() {
       bootbox.alert(message, function() {
         $('body').removeClass('modal-open');
         $('.bootbox, .modal-backdrop').remove();
+        console.error('Failed Authentification');
       });
     }); //exception
 
@@ -355,9 +359,12 @@ $(function() {
       function sendpassword(result) {
         if (result) {
           socket.emit('authenticate', result, 'admin');
+          $('button.admin').addClass('selected');
+          $('button.user').removeClass('selected')
         } else {
           $('button.user').click();
           $('button.admin').removeClass('selected');
+          socket.emit('authenticate', result, 'user');
           console.error('No password');
         }
       }
@@ -378,13 +385,16 @@ $(function() {
 
     $('button.user').click(function(event) {
       $('#edit').hide();
+      $('#query').hide();
+      $('.main').hide();
       $('#Users').addClass('disabled');
       $('#Users').prop('disabled', true);
       $('button.admin').removeClass('disabled');
-    //$('button.admin').removeAttr('disabled');
-      $('button.admin').prop('disabled', false); //JS
+      $('button.admin').prop('disabled', false);
       $('button.user').addClass('disabled');
       $('button.user').prop('disabled', true);
+      $('button.user').addClass('selected');
+      $('button.admin').removeClass('selected');
       socket.emit('authenticate', 'false', 'user');
     }); //button.user click
 
