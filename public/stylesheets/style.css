@@ -2,10 +2,16 @@ html {
   height: 100%;
   background-color:#246
 }
+
 body {
   min-height: 100%;
   font-family: 'Open Sans', sans-serif;
 }
+
+table, td, th {
+  box-sizing: border-box;
+}
+
 table {
   border-spacing: 0;
   border-collapse: collapse;
@@ -16,7 +22,6 @@ table {
 
 th {
   background: #def;
-
 }
 
 td, th {
@@ -31,22 +36,27 @@ td, th {
 tr:nth-child(even) {
   background-color: #fff;
 }
-#data{
-  height:75vh;
+
+#data {
+  height: 90vh;
   overflow: auto;
-  background-color: #f4f4f4
+  background-color: #f4f4f4;
+  overflow-y: hidden;
+  position: relative;
 }
 
 #query {
-  width: 25vh;
+  width: 50vh;
 }
 
 button.selected.tables.btn-default {
-  background: #bfb;
+  background: #337ab7;
 }
+
 button.selected.tables {
-  background: #bfb;
+  background: #337ab7;
 }
+
 .edit:hover{
   background-color: orange;
 }
@@ -58,54 +68,65 @@ button.selected.tables {
 .highlight {
   background: yellow;
 }
+
 #info {
   position: static;
 }
-.jumbotron{
+
+.jumbotron {
   background-color: #246;
   height: 5vh;
   padding-top: 2.5vh;
   padding-bottom: 5vh;
   margin-bottom: 2vh;
 }
+
 .dropdown-menu {
   left: 50%;
   right: auto;
   text-align: center;
   transform: translate(-50%, 0);
 }
+
 #main{
   /*padding-left:22vh;
   padding-right:22vh;*/
 }
+
 #sidebar{
   /*width: 20vh;*/
-  height: 75vh;
+  height: 90vh;
   overflow-y: auto;
   float:left;
   margin-left: .5em;
   margin-right: .5em;
 }
-#tools{
+
+#tools {
   /*width: 20vh;*/
   float:right;
   margin-right: .5em;
   margin-left: .5em;
 }
-#displaydb{
+
+#displaydb {
   /*width: 20vh;*/
 }
-#inputfilter{
+
+#inputfilter {
   /*width: 20vh;*/
   height: 35px;
   padding-right: 0px;
 }
-button{
+
+button {
   height: 35px;
 }
+
 .btn.main{
   border-color:#A9A9A9;
 }
+
 .btn.main:hover{
   border-color:#A9A9A9;
 }
@@ -126,6 +147,24 @@ th:nth-child(1), td:nth-child(1) {
   z-index: 1;
   border-right: groove;
 }
+
 th:hover{
   cursor: pointer;
+}
+
+#edit, #success-alert, #warning-alert {
+  display: none;
+}
+
+.selected {
+  background: #337ab7 !important;
+  color: #ddd !important;
+}
+
+th {
+  text-align: center;
+}
+
+#data table {
+  table-layout: fixed;
 }

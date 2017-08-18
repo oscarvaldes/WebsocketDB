@@ -1,33 +1,38 @@
 <!DOCTYPE html>
 <title>Websocket DB</title>
 <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> -->
+<!-- <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script> -->
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script> -->
 <script src="http://aesl.ces.uga.edu/scripts/jquery/jquery.js"></script>
 <script src="http://aesl.ces.uga.edu/scripts/jquery-ui/jquery-ui.min.js"></script>
 <script src="http://aesl.ces.uga.edu/scripts/jqLibrary.js"></script>
-<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
-<script src="/static.js"></script>
+<script src="http://aesl.ces.uga.edu/scripts/socketio.js"></script>
+<script src="http://aesl.ces.uga.edu/bootstrap/js/bootstrap.min.js"></script>
+<script src="http://aesl.ces.uga.edu/bootstrap/bootbox.min.js"></script>
+<script src="static.js"></script>
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons"rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
+<link rel="stylesheet" href="/stylesheets/style.css">
+
 <div class="jumbotron">
   <div class="container text-center">
     <div id="info">
       <input type="text" placeholder="Enter SQL Query" id="query" autofocus value="">
       <div class="btn-group">
-        <button class="main json btn btn-default disabled" title="Send Query"disabled>json</button>
-        <button class="main text btn btn-default disabled"title="Send Query"disabled>text</button>
-        <button class="main tableb btn btn-default disabled"title="Send Query"disabled>table</button>
+        <button class="main json btn btn-default disabled" title="Send Query" disabled>json</button>
+        <button class="main text btn btn-default disabled" title="Send Query" disabled>text</button>
+        <button class="main tableb btn btn-default disabled" title="Send Query" disabled>table</button>
         <button id="Users" class="btn btn-primary dropdown-toggle btn-sm disabled" title="online users" type="button" data-toggle="dropdown" disabled><i class="material-icons"style="font-size:18px;">group</i></button>
-        <button id="Chat" class="btn btn-primary btn-sm" title="Chat live"><i class="material-icons"style="font-size:18px;">chat</i></button> 
+        <button id="Chat" class="btn btn-primary btn-sm" title="Chat live"><i class="material-icons"style="font-size:18px;">chat</i></button>
         <ul class="dropdown-menu">
         </ul>
       </div>
       <div class="btn-group btn-toggle">
-        <button class="btn btn-default admin">Admin</button>
-        <button class="btn btn-primary active user disabled"disabled>User</button>
+        <button class="btn btn-default admin" accesskey="a"><u>A</u>dmin</button>
+        <button class="btn btn-primary active user disabled" disabled>User</button>
       </div>
       <!-- <div id="usersConnected"></div> -->
     </div>
@@ -48,7 +53,7 @@
   <button class="entireTable btn btn-default disabled"disabled>display entire table</button>
   <button id="excel" class=" btn btn-default disabled" title="export to excel"disabled> <img src="/images/excel.png"style="width:18px;height:18px;"</button>
 </div>
-<div class="container-fluid"id="main">
+<div class="container-fluid" id="main">
 
   <div class="alert alert-success" id="success-alert">
       <button type="button" class="close" data-dismiss="alert">x</button>
