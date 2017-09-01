@@ -1,4 +1,3 @@
-//processes.json:
     {
       "apps" : [{
         "name"        : "WebsocketDB",

@@ -151,7 +151,6 @@ $(function() {
 
       if('RECORDS' in data[0]) {
         sq = data[0].TABLE + ' order by `' + data[0].FIELD + '` limit ' + pageHeight + ' offset ' + Math.min(data[0].RECORDS, recordCount - pageHeight);
-//        sq = data[0].TABLE + ' order by `' + data[0].FIELD + '` limit ' + pageHeight + ' offset ' + data[0].RECORDS;
         $('#query').val(sq);
         goto(position[0], 1);
         socket.emit('query', sq);
@@ -206,13 +205,38 @@ $(function() {
     $(document).on('input', '.edit', function() {
       var th = $('#data th').eq($(this).index()), // returns text of respective header
           value = "'" + $(this).text() + "'",
-          id = $(this).closest('tr').find('td:eq(1)').text();
+          name,
+          id,
+          tableName,
+          matches,
+          idCounter=0;
+
+          $('th').each(function() {
+            console.log($(this).text())
+            if($(this).text()===primaryKey){
+              return false;
+            }
+            else{
+              idCounter++;
+            }
+          });
+
+          id = $(this).closest('tr').find('td:eq('+  idCounter.toString()+')').text(),
 
       $(this).css('background-color', 'orange');
       $(this).addClass('updated');
 
       if (value === "''") {
         value = 'NULL';
+      }
+
+          tableName = $('#query').val(),
+          matches = /from (.*?) /g.exec(tableName);
+
+      if (matches.length > 1) {
+        name = matches[1];
+      } else {
+        console.error('There is an error in your SQL statement');
       }
 
       $(this).data('sql', 'UPDATE ' + name + ' SET ' + th.text() + '=' + value + ' WHERE ' + primaryKey + '= ' + id);
@@ -296,10 +320,10 @@ $(function() {
         $('.updated').each(function() {
           changes.push($(this).data('sql'));
           $(this).removeData('sql');
-        //$(this).removeAttr('style');
           $(this).prop('style', false); //JS
           $(this).removeClass('updated');
         });
+        console.log(changes);
         socket.emit('update', changes);
         changes = [];
         $('td').attr('contenteditable', 'false');
@@ -309,6 +333,7 @@ $(function() {
           $("#success-alert").slideUp(500);
         });
         $('button.editTable').html('<i class="material-icons"style="color:#757575;">edit</i>');
+        $('button.editTable').removeClass('selected');
       } else {
         $('td').attr('contenteditable', 'true');
         $('td').addClass('edit');
@@ -330,30 +355,30 @@ $(function() {
       } //tohere
     });  //button.editTable click
 
-    $('.entireTable').click(function() {
-      var tableName = $('#query').val(),
-          matches = /from (.*?) /g.exec(tableName),
-          value;
-      if (matches.length > 1) {
-        var name = matches[1];
-      } else {
-        console.error('There is an error in your SQL statement');
-        // Not Found
-      }
-      if ($('button.editTable').text() === 'save') {
-        bootbox.confirm("Warning continuing before saving will discard your changes, are you sure?", function(result) {
-          if (result == false) {
-            //do nothing
-          } else {
-            $('button.editTable').html('<i class="material-icons"style="color:#757575;">edit</i>');
-            sql = 'select * from ' + name;
-            createTable(sql);
-          }
-        })
-      } else {
-        createTable('select * from ' + name);
-      }
-    }); //.entireTable click
+    // $('.entireTable').click(function() {
+    //   var tableName = $('#query').val(),
+    //       matches = /from (.*?) /g.exec(tableName),
+    //       value;
+    //   if (matches.length > 1) {
+    //     var name = matches[1];
+    //   } else {
+    //     console.error('There is an error in your SQL statement');
+    //     // Not Found
+    //   }
+    //   if ($('button.editTable').text() === 'save') {
+    //     bootbox.confirm("Warning continuing before saving will discard your changes, are you sure?", function(result) {
+    //       if (result == false) {
+    //         //do nothing
+    //       } else {
+    //         $('button.editTable').html('<i class="material-icons"style="color:#757575;">edit</i>');
+    //         sql = 'select * from ' + name;
+    //         createTable(sql);
+    //       }
+    //     })
+    //   } else {
+    //     createTable('select * from ' + name);
+    //   }
+    // }); //.entireTable click
 
     $('button.admin').click(function() {
       function sendpassword(result) {
@@ -692,9 +717,10 @@ DEBUG_MODE ? console.log(sq):'';
       find,
       position = [0, 1];
 
+  console.log($('#data').height());
   setTimeout(function() {
     pageHeight = Math.round($('#data').height() / 31.2);
-
+    console.log($('#data').height());
     socketEvents();
     events();
 

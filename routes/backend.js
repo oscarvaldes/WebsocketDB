@@ -191,9 +191,14 @@ io.sockets.on('connection', function(socket) {
   }); //socket.on primary
 
   socket.on('update', function(changes) {
+    if(admin){
     changes.forEach(function(statement) {
       db.query(statement, function(err, rows, fields) {});
     });
+  }
+    else{
+      console.warn('Admin is not logged in; therfore, changes cannot be processed.');
+    }
   }); //socket.on update
 
   socket.on('load', function() {
