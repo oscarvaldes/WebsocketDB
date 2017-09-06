@@ -1,10 +1,15 @@
 'use strict';
 
 $(function() {
+  if(window.name ==='admin'){
+    console.log('do the set up here');
+    // socket.emit('admin-refresh');
+  }
   var DEBUG_MODE=false;
 //________________________________________________________________________________________________________________________
   function socketEvents() {
     socket.on('verified', function(message) { //Admin login success
+      window.name='admin';
       $('#edit').show();
       $('#query').show();
       $('.main').show();
@@ -24,6 +29,7 @@ $(function() {
     }); //verified
 
     socket.on('exception', function(message) { //Admin login failed
+      window.name='';
       if(!$('button.user').hasClass('active')) {
         $('button.user').click();
         $('button.admin').removeClass('selected');
@@ -202,6 +208,11 @@ $(function() {
   } //socketEvents
 //________________________________________________________________________________________________________________________
   function events() {
+    $(document).keydown(function(e) {
+      if(e.which==116){
+        console.log('refresh');
+      }
+    });
     $(document).on('input', '.edit', function() {
       var th = $('#data th').eq($(this).index()), // returns text of respective header
           value = "'" + $(this).text() + "'",
@@ -212,7 +223,6 @@ $(function() {
           idCounter=0;
 
           $('th').each(function() {
-            console.log($(this).text())
             if($(this).text()===primaryKey){
               return false;
             }
@@ -409,6 +419,7 @@ $(function() {
     }); //button.admin click
 
     $('button.user').click(function(event) {
+      window.name='';
       $('#edit').hide();
       $('#query').hide();
       $('.main').hide();
