@@ -1,15 +1,10 @@
 'use strict';
 
 $(function() {
-  if(window.name ==='admin'){
-    console.log('do the set up here');
-    // socket.emit('admin-refresh');
-  }
-  var DEBUG_MODE=false;
-//________________________________________________________________________________________________________________________
+  //________________________________________________________________________________________________________________________
   function socketEvents() {
     socket.on('verified', function(message) { //Admin login success
-      window.name='admin';
+      window.name = 'admin';
       $('#edit').show();
       $('#query').show();
       $('.main').show();
@@ -28,9 +23,24 @@ $(function() {
       });
     }); //verified
 
+    socket.on('admin-cache', function(admin) { //Admin Already Logged In
+      if (admin) {
+        $('button.admin').addClass('selected').addClass('btn-primary').addClass('active').addClass('disabled');
+        $('button.admin').prop('disabled', true);
+
+        $('button.user').removeClass('disabled').removeClass('btn-primary').removeClass('active');
+        $('button.user').prop('disabled', false);
+        $('button.main').show();
+        $('#query').show();
+        $('#edit').show();
+      }
+      // $('button.user')
+    }); //admin-cache
+
+
     socket.on('exception', function(message) { //Admin login failed
-      window.name='';
-      if(!$('button.user').hasClass('active')) {
+      window.name = '';
+      if (!$('button.user').hasClass('active')) {
         $('button.user').click();
         $('button.admin').removeClass('selected');
       }
@@ -52,7 +62,7 @@ $(function() {
       $('.dropdown-menu').empty();
 
       $.each(data, function(key, value) {
-        if(value != null) {
+        if (value != null) {
           addresses.push(value.replace(/::ffff:/g, ''));
         }
       });
@@ -65,18 +75,19 @@ $(function() {
 
       $('.exit').each(function(idx, li) {
         var IP = $(this).closest('li').text().slice(0, -6);
+        
         $(this).data('IP', IP);
       });
     }); //users connected
 
     socket.on('clientdisconnect', function(data) {
       socket.disconnect();
-      DEBUG_MODE ? console.log('DISCONNECT'):'';
+      DEBUG_MODE ? console.log('DISCONNECT') : '';
       $('#warning-alert').show();
     }); //clientdisconnect
 
     socket.on('create table text', function(data) {
-      if(!data) return;
+      if (!data) return;
       var sql = $('#query').val(),
           rows = data.split('\n'),
           s = '<table>',
@@ -94,7 +105,7 @@ $(function() {
       checkOrder(sql);
 
       time2 = new Date() - timer - time1;
-      DEBUG_MODE ? console.log('text: Received:' + time1 + '   Rendered:' + time2 + '   Total:' + (time1 + time2)):'';
+      DEBUG_MODE ? console.log('text: Received:' + time1 + '   Rendered:' + time2 + '   Total:' + (time1 + time2)) : '';
     }); //create table text
 
     socket.on('create table JSON', function(data) {
@@ -104,12 +115,12 @@ $(function() {
           time1 = new Date() - timer,
           time2;
 
-      if(data == '[]') {
+      if (data == '[]') {
         return;
       }
 
       data = JSON.parse(data);
-      DEBUG_MODE ? console.log(JSON.stringify(query, null, 2)):'';
+      DEBUG_MODE ? console.log(JSON.stringify(query, null, 2)) : '';
 
       flds = Object.keys(data[0]);
 
@@ -131,7 +142,7 @@ $(function() {
       checkOrder(sql);
 
       time2 = new Date() - timer - time1;
-      DEBUG_MODE ? console.log('json: Received:' + time1 + '   Rendered:' + time2 + '   Total:' + (time1 + time2)):'';
+      DEBUG_MODE ? console.log('json: Received:' + time1 + '   Rendered:' + time2 + '   Total:' + (time1 + time2)) : '';
     }); //create table JSON
 
     socket.on('create table table', function(data) {
@@ -144,7 +155,7 @@ $(function() {
       checkOrder(sql);
 
       time2 = new Date() - timer - time1;
-      DEBUG_MODE ? console.log('table: Received:' + time1 + '   Rendered:' + time2 + '   Total:' + (time1 + time2)):'';
+      DEBUG_MODE ? console.log('table: Received:' + time1 + '   Rendered:' + time2 + '   Total:' + (time1 + time2)) : '';
     }); //create table table
 
     socket.on('info', function(data) {
@@ -153,16 +164,16 @@ $(function() {
           style = '<style>';
 
       data = JSON.parse(data);
-      DEBUG_MODE ? console.log(JSON.stringify(data, null, 2)):'';
+      DEBUG_MODE ? console.log(JSON.stringify(data, null, 2)) : '';
 
-      if('RECORDS' in data[0]) {
+      if ('RECORDS' in data[0]) {
         sq = data[0].TABLE + ' order by `' + data[0].FIELD + '` limit ' + pageHeight + ' offset ' + Math.min(data[0].RECORDS, recordCount - pageHeight);
         $('#query').val(sq);
         goto(position[0], 1);
         socket.emit('query', sq);
-      } else if(data[0].RECORDCOUNT) {
+      } else if (data[0].RECORDCOUNT) {
         recordCount = data[0].RECORDCOUNT;
-      } else if(data[0].Field) {
+      } else if (data[0].Field) {
         data.forEach(function(col, idx) {
           var field = col.Field,
               type = col.Type,
@@ -197,6 +208,7 @@ $(function() {
       $.each(rows, function(key, value) {
         $.each(value, function(key, value) {
           var button = $('<button class="tables btn btn-default">' + value + '</button>');
+          
           $('#database').append(button);
         });
       });
@@ -206,42 +218,42 @@ $(function() {
       primaryKey = key;
     }); //key
   } //socketEvents
-//________________________________________________________________________________________________________________________
+  //________________________________________________________________________________________________________________________
   function events() {
     $(document).keydown(function(e) {
-      if(e.which==116){
+      if (e.which == 116) {
         console.log('refresh');
       }
     });
+
     $(document).on('input', '.edit', function() {
       var th = $('#data th').eq($(this).index()), // returns text of respective header
-          value = "'" + $(this).text() + "'",
+          value = `'${$(this).text()}'`,
+          idCounter = 0,
           name,
           id,
           tableName,
-          matches,
-          idCounter=0;
+          matches;
 
-          $('th').each(function() {
-            if($(this).text()===primaryKey){
-              return false;
-            }
-            else{
-              idCounter++;
-            }
-          });
+      $('th').each(function() {
+        if ($(this).text() == primaryKey) {
+          return false;
+        } else {
+          idCounter++;
+        }
+      });
 
-          id = $(this).closest('tr').find('td:eq('+  idCounter.toString()+')').text(),
+      id = $(this).closest('tr').find('td:eq(' + idCounter.toString() + ')').text(),
 
-      $(this).css('background-color', 'orange');
+        $(this).css('background-color', 'orange');
       $(this).addClass('updated');
 
-      if (value === "''") {
+      if (value == "''") {
         value = 'NULL';
       }
 
-          tableName = $('#query').val(),
-          matches = /from (.*?) /g.exec(tableName);
+      tableName = $('#query').val(),
+        matches = /from (.*?) /g.exec(tableName);
 
       if (matches.length > 1) {
         name = matches[1];
@@ -249,7 +261,7 @@ $(function() {
         console.error('There is an error in your SQL statement');
       }
 
-      $(this).data('sql', 'UPDATE ' + name + ' SET ' + th.text() + '=' + value + ' WHERE ' + primaryKey + '= ' + id);
+      $(this).data('sql', `UPDATE ${name} SET ${th.text()} = ${value} WHERE ${primaryKey} = ${id}`);
     }); //document on input edit
 
     $('.btn-toggle').click(function() {
@@ -263,7 +275,7 @@ $(function() {
     }); //.btn-toggle click
 
     $('#query').on('input', function(e) {
-      if($('#query').val()) {
+      if ($('#query').val()) {
         $('button.main.btn.btn-default').removeClass('disabled');
         $('button.main.btn.btn-default').prop('disabled', false);
       } else {
@@ -300,7 +312,8 @@ $(function() {
       var sql = `select * from ${$(this).text()} limit ${pageHeight} offset 0`,
           matches = /from (.*?) /g.exec(sql),
           res = sql.replace(matches[1], $(this).text());
-          sql = res;
+
+      sql = res;
 
       $('button.tables').each(function() {
         $(this).css('background-color', '');
@@ -352,10 +365,11 @@ $(function() {
         $('.edit').click(function() {
           var tableName = $('#query').val(),
               matches = /from (.*?) /g.exec(tableName),
-              value;
+              value,
+              name;
 
           if (matches.length > 1) {
-            var name = matches[1];
+            name = matches[1];
           } else {
             console.error('There is an error in your SQL statement');
           }
@@ -363,32 +377,7 @@ $(function() {
         });
 
       } //tohere
-    });  //button.editTable click
-
-    // $('.entireTable').click(function() {
-    //   var tableName = $('#query').val(),
-    //       matches = /from (.*?) /g.exec(tableName),
-    //       value;
-    //   if (matches.length > 1) {
-    //     var name = matches[1];
-    //   } else {
-    //     console.error('There is an error in your SQL statement');
-    //     // Not Found
-    //   }
-    //   if ($('button.editTable').text() === 'save') {
-    //     bootbox.confirm("Warning continuing before saving will discard your changes, are you sure?", function(result) {
-    //       if (result == false) {
-    //         //do nothing
-    //       } else {
-    //         $('button.editTable').html('<i class="material-icons"style="color:#757575;">edit</i>');
-    //         sql = 'select * from ' + name;
-    //         createTable(sql);
-    //       }
-    //     })
-    //   } else {
-    //     createTable('select * from ' + name);
-    //   }
-    // }); //.entireTable click
+    }); //button.editTable click
 
     $('button.admin').click(function() {
       function sendpassword(result) {
@@ -419,7 +408,7 @@ $(function() {
     }); //button.admin click
 
     $('button.user').click(function(event) {
-      window.name='';
+      window.name = '';
       $('#edit').hide();
       $('#query').hide();
       $('.main').hide();
@@ -460,59 +449,59 @@ $(function() {
       var delta,
           offset = $('#query').val().split('offset ')[1];
 
-      if(!$('td:focus').length) {
+      if (!$('td:focus').length) {
         return;
       }
 
-      if(e.key === 'Home') {
-        if(e.ctrlKey) {
+      if (e.key === 'Home') {
+        if (e.ctrlKey) {
           goto(position[0], 1);
           changeOffset(0);
         } else {
-          goto(1, position[1]);
+          goto(2, position[1]);
         }
-      } else if(e.key === 'End') {
-        if(e.ctrlKey) {
+      } else if (e.key === 'End') {
+        if (e.ctrlKey) {
           goto(position[0], pageHeight);
           changeOffset(recordCount - pageHeight);
         } else {
           goto(-1, position[1]);
         }
-      } else if(e.key === 'f' && e.ctrlKey) {
+      } else if (e.key === 'f' && e.ctrlKey) {
         find = prompt('Locate Value');
-        if(find) {
+        if (find) {
           $('th i').remove();
           search($('th').eq(position[0]).text(), find);
         }
         return false;
       } else if (e.which === 34) { //PGDN
-        if(+offset === recordCount - pageHeight) {
+        if (+offset === recordCount - pageHeight) {
           goto(position[0], pageHeight);
         } else {
           delta = pageHeight;
         }
       } else if (e.which === 33) { //PGUP
-        if(+offset === 0) {
+        if (+offset === 0) {
           goto(position[0], 1);
         } else {
           delta = -pageHeight;
         }
       } else if (e.which === 40) { //down
-        if(e.ctrlKey || $('td:focus').parent().index() == pageHeight) {
+        if (e.ctrlKey || $('td:focus').parent().index() == pageHeight) {
           delta = 1;
         } else {
           goto(position[0], position[1] + 1);
         }
       } else if (e.which === 38) { //up
-        if((e.ctrlKey && offset !== '0') || $('td:focus').parent().index() == 1) {
+        if ((e.ctrlKey && offset !== '0') || $('td:focus').parent().index() == 1) {
           delta = -1;
         } else {
           goto(position[0], position[1] - 1);
         }
-      } else if(e.which === 37) { //left
+      } else if (e.which === 37) { //left
         goto(Math.max(0, position[0] - 1), position[1]);
         return false;
-      } else if(e.which === 39) { //right
+      } else if (e.which === 39) { //right
         goto(position[0] + 1, position[1]);
         return false;
       }
@@ -531,21 +520,23 @@ $(function() {
 
     $('button#excel').click(function() {
       var url = 'data:application/vnd.ms-excel,' + encodeURIComponent($('#data').html())
+
       location.href = url
       return false
     });
 
     $(document).on('click', '.exit', function(event) {
       event.stopPropagation();
-      DEBUG_MODE ? console.log($(this).data('IP')):'';
+      DEBUG_MODE ? console.log($(this).data('IP')) : '';
       socket.emit('adminBoot', $(this).data('IP'));
     });
 
     $('#data').scroll(function() {
       var top = $('#data').scrollTop(),
-        left = $('#data').scrollLeft();
+          left = $('#data').scrollLeft();
+      
       $('tr:nth-child(1) th').css('top', top - 1);
-      $('th:nth-child(1), td:nth-child(1)').css('left', left - 1);
+      $('th:nth-child(2), td:nth-child(2)').css('left', left - 1);
     });
 
     $('button.main').click(function(event) {
@@ -555,7 +546,7 @@ $(function() {
           value,
           name;
 
-      if (matches!=null && matches.length > 1) {
+      if (matches != null && matches.length > 1) {
         name = matches[1];
         $('button.tables').each(function() {
           $(this).css('background-color', '');
@@ -572,49 +563,49 @@ $(function() {
       }
     }); //button.main click
   } //events
-//________________________________________________________________________________________________________________________
+  //________________________________________________________________________________________________________________________
   function numeric(field) {
     return !(/varchar/.test(dataType[field]));
   } //numeric
-//________________________________________________________________________________________________________________________
+  //________________________________________________________________________________________________________________________
   function search(field, find) {
     var sql = $('#query').val(),
         table = /^select/i.test(sql) && sql.match(/(.+ from .+?)( |$)/i)[1],
         q = sql.split(/( where .+)?limit /i),
         sq;
 
-    if(numeric(field)) {
+    if (numeric(field)) {
       find = +find || 0;
     } else {
       find = '"' + find + '"';
     }
 
     sq = 'select count(*) as RECORDS, "' + field + '" as FIELD, "' + table + '" as `TABLE` from (' +
-            table +
-            ' where `' + field + '` < ' + find + ' or `' + field + '` is null' +
-          ') as ALIAS';
+      table +
+      ' where `' + field + '` < ' + find + ' or `' + field + '` is null' +
+      ') as ALIAS';
 
-DEBUG_MODE ? console.log(sq):'';
+    DEBUG_MODE ? console.log(sq) : '';
     socket.emit('query', sq, 'info');
   } //search
-//________________________________________________________________________________________________________________________
+  //________________________________________________________________________________________________________________________
   function goto(col, row) {
-    var sl = $('#data').scrollLeft(),  //get the current scroll position
+    var sl = $('#data').scrollLeft(), //get the current scroll position
         $td = $(`tr:eq(${row}) td:eq(${col})`).focus();
 
-    if($td.length) {
-      $('#data').scrollLeft(sl);  //restore the original scroll position, because Chrome ain't too bright about this
+    if ($td.length) {
+      $('#data').scrollLeft(sl); //restore the original scroll position, because Chrome ain't too bright about this
 
-      while(sl > 0 && $td.position().left < $('th:nth-child(1)').width() + 20) {
-        $('#data').scrollLeft(sl-= 10);
+      while (sl > 0 && $td.position().left < $('th:nth-child(2)').width() + 20) {
+        $('#data').scrollLeft(sl -= 10);
       }
 
-      while(sl < $('#data')[0].scrollWidth && $td.position().left + $td.width() > $('#data').width() - 20) {
-        $('#data').scrollLeft(sl+= 10);
+      while (sl < $('#data')[0].scrollWidth && $td.position().left + $td.width() > $('#data').width() - 20) {
+        $('#data').scrollLeft(sl += 10);
       }
     }
   } //goto
-//________________________________________________________________________________________________________________________
+  //________________________________________________________________________________________________________________________
   function createTable(sql) {
     var sql = (sql || $('#query').val()).trim(),
         format = $('button[title="Send Query"].selected').text().replace('json', 'JSON'),
@@ -622,7 +613,7 @@ DEBUG_MODE ? console.log(sq):'';
 
     timer = new Date();
 
-    if(table && (table !== currentTable)) {
+    if (table && (table !== currentTable)) {
       socket.emit('query', `create temporary table temp (${sql})`);
       socket.emit('query', `describe temp`, 'info');
       socket.emit('query', `select count(*) as RECORDCOUNT from (${sql.replace(/ limit \d+ offset \d+/i, ' ')}) as TEMP`, 'info');
@@ -633,7 +624,7 @@ DEBUG_MODE ? console.log(sq):'';
       socket.emit('query', sql, format);
     }
   } //createTable
-//________________________________________________________________________________________________________________________
+  //________________________________________________________________________________________________________________________
   function checkOrder(sql) {
     var sql = sql || $('#query').val(),
         desc = / desc /i.test(sql),
@@ -647,31 +638,31 @@ DEBUG_MODE ? console.log(sq):'';
     $('#data th').each(function(idx) {
       var name = $(this).text();
 
-      if(name !== 'Lab' && dataType[name] === 'double') {
+      if (name !== 'Lab' && dataType[name] === 'double') {
         $(`#data td:nth-child(${idx + 1})`).text(function(_, txt) {
           return txt ? (+txt).toFixed(4) : '';
         });
       }
     });
 
-    if(order) {
-      if(+order[1]) {
+    if (order) {
+      if (+order[1]) {
         col = order[1] - 1;
       } else {
         col = $('th').filter(new RegExp('^' + order[1].replace(/`/g, '') + '$', 'i')).index();
       }
 
-      if(find) {
+      if (find) {
         $(`#data tr:last td:nth-child(${col + 1})`).focus();
 
         $(`td:nth-child(${col + 1})`).each(function() {
-          if(numeric($(`th:nth-child(${col + 1})`).text())) {
-            if(+$(this).text() >= +find) {
+          if (numeric($(`th:nth-child(${col + 1})`).text())) {
+            if (+$(this).text() >= +find) {
               $(this).focus();
               return false;
             }
           } else {
-            if($(this).text().toUpperCase() >= find.toUpperCase()) {
+            if ($(this).text().toUpperCase() >= find.toUpperCase()) {
               $(this).focus();
               return false;
             }
@@ -680,25 +671,25 @@ DEBUG_MODE ? console.log(sq):'';
         find = '';
       }
 
-      if(desc) {
+      if (desc) {
         $('th').eq(col).append('<i class="material-icons down" style="font-size:18px;">keyboard_arrow_down</i>');
       } else {
         $('th').eq(col).append('<i class="material-icons up"   style="font-size:18px;">keyboard_arrow_up</i>');
       }
     }
   } //checkOrder
-//________________________________________________________________________________________________________________________
+  //________________________________________________________________________________________________________________________
   function order(n) {
     var q = ' ' + $('#query').val() + ' ',
-        flds    = q.match(/ select (.+?) from /i),
-        table   = q.match(/ from (.+?) /i),
-        limit   = q.match(/ limit (.+?) /i),
-        offset  = q.match(/ offset (.+?) /i),
+        flds = q.match(/ select (.+?) from /i),
+        table = q.match(/ from (.+?) /i),
+        limit = q.match(/ limit (.+?) /i),
+        offset = q.match(/ offset (.+?) /i),
         asc = $('th').eq(n - 1).find('i.up').length,
         s = `select ${flds[1]} from ${table[1]} order by ${n}` + (asc ? ' desc' : '');
 
-    if(limit)  s += ` limit ${limit[1]}`;
-    if(offset) s += ` offset 0`;
+    if (limit) s += ` limit ${limit[1]}`;
+    if (offset) s += ` offset 0`;
 
     position = [position[0], 1];
 
@@ -706,29 +697,34 @@ DEBUG_MODE ? console.log(sq):'';
 
     createTable();
   } //order
-//________________________________________________________________________________________________________________________
+  //________________________________________________________________________________________________________________________
   function changeOffset(n) {
     var sql = $('#query').val().replace(/ offset \d+/, ' offset ' + n);
+  
     timer = new Date();
     $('#query').val(sql);
 
     socket.emit('query', sql);
   } //changeOoffset
-//________________________________________________________________________________________________________________________
-  var socket = io.connect('http://aesl.ces.uga.edu:8080/', {  // Connect to our node/websockets server
+  //________________________________________________________________________________________________________________________
+  var socket = io.connect('http://aesl.ces.uga.edu:8080/', { // Connect to our node/websockets server
         reconnection: false
       }),
-      primaryKey,
-      timer,
       pageHeight = 22,
-      recordCount,
       changes = [],
       dataType = {},
+      position = [0, 1],
+      DEBUG_MODE = false,
+      primaryKey,
+      timer,
       currentTable,
       find,
-      position = [0, 1];
+      recordCount;
 
-  console.log($('#data').height());
+  if (window.name == 'admin') {
+    socket.emit('admin-refresh');
+  }
+
   setTimeout(function() {
     pageHeight = Math.round($('#data').height() / 31.2);
     console.log($('#data').height());
@@ -737,4 +733,5 @@ DEBUG_MODE ? console.log(sq):'';
 
     socket.emit('load');
   });
+
 });

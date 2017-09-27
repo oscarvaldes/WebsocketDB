@@ -227,6 +227,12 @@ io.sockets.on('connection', function(socket) {
     console.log('admin log in attempt success: ' + admin);
   }); //socket.on authenticate
 
+  socket.on('admin-refresh', function(password,user) {
+
+    socket.emit('admin-cache',admin);
+
+  }); //socket.on admin-refresh
+
   socket.on('adminBoot', function(IP) {
     for (var i in socketarray) {
       var s = socketarray[i];

@@ -132,24 +132,24 @@ button {
   border-color:#A9A9A9;
 }
 
-tr:nth-child(1) th {
+tr:nth-child(2) th {
   position: relative;
   background: #def;
   border-bottom: groove;
 }
 
-tr:nth-child(1) th:nth-child(1) {
+tr:nth-child(1) th:nth-child(2) {
   z-index: 2;
 }
 
-th:nth-child(1), td:nth-child(1) {
+th:nth-child(2), td:nth-child(2) {
   position: relative;
   background: #eee;
   z-index: 1;
   border-right: groove;
 }
 
-th:hover{
+th:hover {
   cursor: pointer;
 }
 
@@ -168,4 +168,9 @@ th {
 
 #data table {
   table-layout: fixed;
+}
+
+#data table td:nth-child(1),
+#data table th:nth-child(1) {
+  display: none;
 }
