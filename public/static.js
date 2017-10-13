@@ -6,6 +6,7 @@ $(function() {
     socket.on('verified', function(message) { //Admin login success
       window.name = 'admin';
       $('#edit').show();
+      $('#commit').show();
       $('#query').show();
       $('.main').show();
 
@@ -75,7 +76,7 @@ $(function() {
 
       $('.exit').each(function(idx, li) {
         var IP = $(this).closest('li').text().slice(0, -6);
-        
+
         $(this).data('IP', IP);
       });
     }); //users connected
@@ -208,7 +209,7 @@ $(function() {
       $.each(rows, function(key, value) {
         $.each(value, function(key, value) {
           var button = $('<button class="tables btn btn-default">' + value + '</button>');
-          
+
           $('#database').append(button);
         });
       });
@@ -335,20 +336,21 @@ $(function() {
       $(this).addClass('selected');
       $('#displaydb').removeClass('selected');
       $('#Users').removeClass('selected');
+      $('button#commit').removeClass('selected');
     });
 
     $('button.editTable').click(function(event) {
       //send update request
       if ($('button.editTable').text() === 'save') {
+        $('button.tables').prop('disabled', false);
+        $('button.main').prop('disabled', false);
+        $('input#query').prop('disabled', false);
         $('.updated').each(function() {
           changes.push($(this).data('sql'));
           $(this).removeData('sql');
           $(this).prop('style', false); //JS
           $(this).removeClass('updated');
         });
-        console.log(changes);
-        socket.emit('update', changes);
-        changes = [];
         $('td').attr('contenteditable', 'false');
         $('td').removeClass('edit');
         $("#success-alert").alert();
@@ -358,6 +360,9 @@ $(function() {
         $('button.editTable').html('<i class="material-icons"style="color:#757575;">edit</i>');
         $('button.editTable').removeClass('selected');
       } else {
+        $('button.tables').prop('disabled', true);
+        $('button.main').prop('disabled', true);
+        $('input#query').prop('disabled', true);
         $('td').attr('contenteditable', 'true');
         $('td').addClass('edit');
         $('button.editTable').html('<i class="material-icons" style="font-size:18px; color:#757575;">save</i>');
@@ -378,6 +383,32 @@ $(function() {
 
       } //tohere
     }); //button.editTable click
+
+    $('button#commit').click(function(event) {
+
+      //place bootbox warning here
+    bootbox.confirm({
+    title: "Commit Changes To Database",
+    message: "Are you sure? This cannot be undone. Only saved changes will be commited",
+    buttons: {
+        cancel: {
+            label: '<i class="fa fa-times"></i> Cancel'
+        },
+        confirm: {
+            label: '<i class="fa fa-check"></i> Confirm'
+        }
+    },
+    callback: function (result) {
+      if(result){
+      socket.emit('commit-changes', changes);
+      changes = [];
+      $('td').attr('contenteditable', 'false');
+      $('td').removeClass('edit');
+    }
+  }
+  });
+
+    });
 
     $('button.admin').click(function() {
       function sendpassword(result) {
@@ -534,7 +565,7 @@ $(function() {
     $('#data').scroll(function() {
       var top = $('#data').scrollTop(),
           left = $('#data').scrollLeft();
-      
+
       $('tr:nth-child(1) th').css('top', top - 1);
       $('th:nth-child(2), td:nth-child(2)').css('left', left - 1);
     });
@@ -700,7 +731,7 @@ $(function() {
   //________________________________________________________________________________________________________________________
   function changeOffset(n) {
     var sql = $('#query').val().replace(/ offset \d+/, ' offset ' + n);
-  
+
     timer = new Date();
     $('#query').val(sql);
 

@@ -1,0 +1,4 @@
+-add functionality that does not allow user to leave until changes are commited
+or dropped
+-add filter entire table functionality (change sql)
+-make button to view local saved changes

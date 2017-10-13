@@ -93,6 +93,10 @@ button.selected.tables {
 
 }
 
+#commit{
+  
+}
+
 #sidebar{
   /*width: 20vh;*/
   height: 90vh;
@@ -153,7 +157,7 @@ th:hover {
   cursor: pointer;
 }
 
-#edit, #success-alert, #warning-alert {
+#edit, #success-alert, #warning-alert, #commit {
   display: none;
 }
 

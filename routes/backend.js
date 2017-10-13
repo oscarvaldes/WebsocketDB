@@ -2,11 +2,8 @@ var express = require('express'),
     mysql = require('mysql'),
     fs = require('fs'),
     router = express.Router(),
-    bodyParser = require('body-parser'),
     path = require('path'),
     moment = require('moment'),
-    tableName,
-    connection,
     admin = false,
     globalIP = 'none',
     io = require('socket.io').listen(8080),
@@ -14,17 +11,13 @@ var express = require('express'),
            host: 'soiltest',
            user: 'root',
            password: 'Blue$apph1re#2',
-           database: 'agdbmysql'
-         });
+           database: 'agdbmysql',
+           multipleStatements: 'true'
+         }),
     notes = [],
     initialNotes = false,
-    socketCount = 0,
     addresses = [],
     socketarray = [];
-
-router.use(bodyParser.urlencoded({
-  extended: true
-}));
 
 // Define our db creds
 
@@ -60,9 +53,9 @@ db.connect(function(err) {
 function fldValue(row, fld) {
   var val = row[fld.name];
 
-  if (fld.type === 12) { //datetime
+  if (fld.type == 12) { //datetime
     return moment(val).format('MM/DD/YYYY');
-  } else if (val === null) {
+  } else if (val == null) {
     return '';
   } else {
     return val;
@@ -126,13 +119,7 @@ function json(rows, fields) {
 } //json
 
 io.sockets.on('connection', function(socket) {
-  // Socket has connected, increase socket count
-  socketCount++;
-
-  addresses.push(socket.handshake.address);
-  for(var i=0; i< addresses.length; i++) {
-    addresses[i]= addresses[i].replace(/::ffff:/g, '');
-  }
+  addresses.push(socket.handshake.address.replace(/::ffff:/g, ''));
 
   socket.id=(socket.handshake.address).replace(/::ffff:/g, '');
   socketarray.push(socket);
@@ -141,25 +128,23 @@ io.sockets.on('connection', function(socket) {
   io.sockets.emit('users connected', addresses);
 
   socket.on('disconnect', function() {
-    // Decrease the socket count on a disconnect, emit
-    socketCount--;
-    for(var i=0;i<addresses.length;i++) {
-      if(globalIP===addresses[i]){
+    for(var i = 0; i < addresses.length; i++) {
+      if(globalIP == addresses[i]) {
         addresses.splice(i, 1);
-        socketarray.splice(i,1);
+        socketarray.splice(i, 1);
         break;
       }
-      if(globalIP==='none'){
-        if(addresses[i]===socket.id){
-          addresses.splice(i,1);
-          socketarray.splice(i,1);
+      if(globalIP == 'none'){
+        if(addresses[i] == socket.id) {
+          addresses.splice(i, 1);
+          socketarray.splice(i, 1);
           break;
         }
       }
     }
     console.log(addresses);
-    globalIP='none';
-    io.sockets.emit('users connected', addresses)
+    globalIP = 'none';
+    io.sockets.emit('users connected', addresses);
   }); //socket.on disconnect
 
   socket.on('query', function(sql, format) {
@@ -170,13 +155,13 @@ io.sockets.on('connection', function(socket) {
     console.log(sql, ': ' , format);
     db.query(sql, function(err, rows, fields) {
       console.log(err);
-      if (type === 'JSON') {
+      if (type == 'JSON') {
         socket.emit('create table JSON', json(rows, fields));
-      } else if (type === 'text') {
+      } else if (type == 'text') {
         socket.emit('create table text', text(rows, fields, fldnames, data));
-      } else if (type === 'table') {
+      } else if (type == 'table') {
         socket.emit('create table table', table(rows, fields, fldnames, data));
-      } else if (type === 'info') {
+      } else if (type == 'info') {
         console.log(json(rows, fields));
         socket.emit('info', json(rows, fields));
       }
@@ -190,13 +175,14 @@ io.sockets.on('connection', function(socket) {
     });
   }); //socket.on primary
 
-  socket.on('update', function(changes) {
-    if(admin){
-    changes.forEach(function(statement) {
-      db.query(statement, function(err, rows, fields) {});
-    });
-  }
-    else{
+  socket.on('commit-changes', function(changes) {
+    if(admin) {
+      changes.forEach(function(statement) {
+        db.query(statement, function(err, rows, fields) {});
+      });
+      db.query('commit', function(err, rows, fields) {});
+    }
+    else {
       console.warn('Admin is not logged in; therfore, changes cannot be processed.');
     }
   }); //socket.on update
@@ -209,42 +195,41 @@ io.sockets.on('connection', function(socket) {
 
   socket.on('authenticate', function(password,user) {
     console.log(password);
-    if (password !== 'soiltest') {
+    if (password != 'soiltest') {
       admin = false;
-      if(password==''){
+      if(password == '') {
         socket.emit('exception','Error: No Password')
       }
-      if(user !== 'user'){
+      if(user != 'user') {
         socket.emit('exception', 'Error: Wrong Password');
       }
-
     }
     else {
       admin = true;
+      //start transaction query statement
+      db.query("SET autocommit = 0; START TRANSACTION;", function(err, rows, fields) {console.log(err)});
       socket.emit('verified', 'Admin Succesfully Logged In');
     }
 
     console.log('admin log in attempt success: ' + admin);
   }); //socket.on authenticate
 
-  socket.on('admin-refresh', function(password,user) {
+  socket.on('admin-refresh', function(password, user) {
 
-    socket.emit('admin-cache',admin);
+    socket.emit('admin-cache', admin);
 
   }); //socket.on admin-refresh
 
   socket.on('adminBoot', function(IP) {
-    for (var i in socketarray) {
-      var s = socketarray[i];
+    socketarray.forEach(function(s) {
       console.log('test: '+s.id);
-      if (s.id === IP) {
-        globalIP=IP;
-        console.log('globalIP: '+globalIP);
+      if (s.id == IP) {
+        globalIP = IP;
+        console.log('globalIP: ' + globalIP);
         s.emit('clientdisconnect');
         console.log(IP+' has been booted by admin');
-         break;
       }
-    }
+    });
   }); //socket.on adminBoot
 }); //connection
 
