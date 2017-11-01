@@ -58,10 +58,7 @@ button.selected.tables {
   background: #337ab7;
 }
 
-.edit:hover{
-  background-color: orange;
-}
-.exit:hover{
+.exit:hover {
   color: red;
   cursor: pointer;
 }
@@ -127,12 +124,12 @@ button {
   height: 35px;
 }
 
-.btn.main{
+.btn.main {
   border-color:#A9A9A9;
   display: none;
 }
 
-.btn.main:hover{
+.btn.main:hover {
   border-color:#A9A9A9;
 }
 
@@ -144,6 +141,11 @@ tr:nth-child(2) th {
 
 tr:nth-child(1) th:nth-child(2) {
   z-index: 2;
+}
+
+td:focus {
+  background: #33f;
+  color: white;
 }
 
 th:nth-child(2), td:nth-child(2) {
@@ -177,4 +179,8 @@ th {
 #data table td:nth-child(1),
 #data table th:nth-child(1) {
   display: none;
+}
+
+.updated {
+  background: yellow;
 }

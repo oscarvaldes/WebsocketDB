@@ -1,14 +1,11 @@
 'use strict';
 
-$(function() {
   //________________________________________________________________________________________________________________________
   function socketEvents() {
     socket.on('verified', function(message) { //Admin login success
       window.name = 'admin';
-      $('#edit').show();
-      $('#commit').show();
-      $('#query').show();
-      $('.main').show();
+
+      $('#edit, #commit, #query, .main').show();
 
       $('#Users, button.user').removeClass('disabled');
       $('#Users, button.user').prop('disabled', false);
@@ -26,18 +23,15 @@ $(function() {
 
     socket.on('admin-cache', function(admin) { //Admin Already Logged In
       if (admin) {
-        $('button.admin').addClass('selected').addClass('btn-primary').addClass('active').addClass('disabled');
+        $('button.admin').addClass('selected btn-primary active disabled');
         $('button.admin').prop('disabled', true);
 
-        $('button.user').removeClass('disabled').removeClass('btn-primary').removeClass('active');
+        $('button.user').removeClass('disabled btn-primary active');
         $('button.user').prop('disabled', false);
-        $('button.main').show();
-        $('#query').show();
-        $('#edit').show();
+        $('button.main, #query, #edit, #commit').show();
       }
       // $('button.user')
     }); //admin-cache
-
 
     socket.on('exception', function(message) { //Admin login failed
       window.name = '';
@@ -83,7 +77,7 @@ $(function() {
 
     socket.on('clientdisconnect', function(data) {
       socket.disconnect();
-      DEBUG_MODE ? console.log('DISCONNECT') : '';
+      DEBUG_MODE && console.log('DISCONNECT');
       $('#warning-alert').show();
     }); //clientdisconnect
 
@@ -106,7 +100,7 @@ $(function() {
       checkOrder(sql);
 
       time2 = new Date() - timer - time1;
-      DEBUG_MODE ? console.log('text: Received:' + time1 + '   Rendered:' + time2 + '   Total:' + (time1 + time2)) : '';
+      DEBUG_MODE && console.log('text: Received:' + time1 + '   Rendered:' + time2 + '   Total:' + (time1 + time2));
     }); //create table text
 
     socket.on('create table JSON', function(data) {
@@ -121,7 +115,7 @@ $(function() {
       }
 
       data = JSON.parse(data);
-      DEBUG_MODE ? console.log(JSON.stringify(query, null, 2)) : '';
+      DEBUG_MODE && console.log(JSON.stringify(query, null, 2));
 
       flds = Object.keys(data[0]);
 
@@ -143,7 +137,7 @@ $(function() {
       checkOrder(sql);
 
       time2 = new Date() - timer - time1;
-      DEBUG_MODE ? console.log('json: Received:' + time1 + '   Rendered:' + time2 + '   Total:' + (time1 + time2)) : '';
+      DEBUG_MODE && console.log('json: Received:' + time1 + '   Rendered:' + time2 + '   Total:' + (time1 + time2));
     }); //create table JSON
 
     socket.on('create table table', function(data) {
@@ -156,7 +150,7 @@ $(function() {
       checkOrder(sql);
 
       time2 = new Date() - timer - time1;
-      DEBUG_MODE ? console.log('table: Received:' + time1 + '   Rendered:' + time2 + '   Total:' + (time1 + time2)) : '';
+      DEBUG_MODE && console.log('table: Received:' + time1 + '   Rendered:' + time2 + '   Total:' + (time1 + time2));
     }); //create table table
 
     socket.on('info', function(data) {
@@ -165,7 +159,7 @@ $(function() {
           style = '<style>';
 
       data = JSON.parse(data);
-      DEBUG_MODE ? console.log(JSON.stringify(data, null, 2)) : '';
+      DEBUG_MODE && console.log(JSON.stringify(data, null, 2));
 
       if ('RECORDS' in data[0]) {
         sq = data[0].TABLE + ' order by `' + data[0].FIELD + '` limit ' + pageHeight + ' offset ' + Math.min(data[0].RECORDS, recordCount - pageHeight);
@@ -223,9 +217,52 @@ $(function() {
   function events() {
     $(document).keydown(function(e) {
       if (e.which == 116) {
-        console.log('refresh');
+        console.log('refresh'); //???
+      } else if (e.key == 'e' && e.ctrlKey) {
+        $('#edit').click();
+        return false;
       }
     });
+
+    $(document).on('keydown', 'td', function(e) {
+      if(e.key == 'F2') {
+        $('td:focus')[0].selectionStart = $('td:focus').text().length;
+        console.log($('td:focus').text().length);
+      }
+    }); //td keydown
+
+    $(document).on('blur', 'td', function(e) {
+      this.contentEditable = false;
+    }); //td blur
+
+    $(document).on('focus', 'td', function() {
+      this.contentEditable = true;
+      // console.log('focus');
+      position = [$(this).index(), $(this).parent().index()];
+    }); //td focus
+
+    $(document).on('keypress', 'td', function(e) {
+      return;
+      if($('#edit').text() == 'save' && this.contentEditable != 'true') {
+        $('td').attr('contenteditable', 'false');
+        this.contentEditable = true;
+//        $(this).text(e.key).focus(); //.select();
+      }
+    }); //td keydown
+
+    $(document).on('focus', 'td', function() {
+      function selectElementContents(el) {
+        var range = document.createRange(),
+            sel;
+
+        range.selectNodeContents(el);
+        sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      } //selectElementContents
+
+//      selectElementContents(this);
+    }); //document focus td
 
     $(document).on('input', '.edit', function() {
       var th = $('#data th').eq($(this).index()), // returns text of respective header
@@ -246,7 +283,6 @@ $(function() {
 
       id = $(this).closest('tr').find('td:eq(' + idCounter.toString() + ')').text(),
 
-        $(this).css('background-color', 'orange');
       $(this).addClass('updated');
 
       if (value == "''") {
@@ -254,7 +290,7 @@ $(function() {
       }
 
       tableName = $('#query').val(),
-        matches = /from (.*?) /g.exec(tableName);
+      matches = /from (.*?) /g.exec(tableName);
 
       if (matches.length > 1) {
         name = matches[1];
@@ -323,7 +359,7 @@ $(function() {
 
       $('button.main.btn.btn-default').removeClass('disabled');
       $('button.main.btn.btn-default').prop('disabled', false);
-      $('button.editTable').html('<i class="material-icons"style="color:#757575;">edit</i>');
+      $('#edit').html('<i class="material-icons"style="color:#757575;">edit</i>');
 
       $('#query').val(sql);
       createTable();
@@ -339,33 +375,50 @@ $(function() {
       $('button#commit').removeClass('selected');
     });
 
-    $('button.editTable').click(function(event) {
+    $('#edit').click(function(event) {
       //send update request
-      if ($('button.editTable').text() === 'save') {
-        $('button.tables').prop('disabled', false);
-        $('button.main').prop('disabled', false);
-        $('input#query').prop('disabled', false);
+      if ($('#edit').text() == 'save') {
+        $('button.tables, button.main, input#query').prop('disabled', false);
+
         $('.updated').each(function() {
           changes.push($(this).data('sql'));
-          $(this).removeData('sql');
-          $(this).prop('style', false); //JS
-          $(this).removeClass('updated');
+          $(this).removeData('sql')
+                 .prop('style', false)
+                 .removeClass('updated');
         });
-        $('td').attr('contenteditable', 'false');
-        $('td').removeClass('edit');
-        $("#success-alert").alert();
-        $("#success-alert").fadeTo(2000, 500).slideUp(500, function() {
-          $("#success-alert").slideUp(500);
+
+        bootbox.confirm({
+          title: "Commit Changes To Database",
+          message: "Are you sure? This cannot be undone. Only saved changes will be commited",
+          buttons: {
+            cancel: {
+              label: '<i class="fa fa-times"></i> Cancel'
+            },
+            confirm: {
+              label: '<i class="fa fa-check"></i> Confirm'
+            }
+          },
+          callback: function (result) {
+            if(result) {
+              socket.emit('commit-changes', changes);
+              changes = [];
+              $('td').attr('contenteditable', 'false');
+              $('td').removeClass('edit');
+              $("#success-alert").alert();
+              $("#success-alert").fadeTo(2000, 500).slideUp(500, function() {
+              $("#success-alert").slideUp(500);
+              });
+            }
+          }
         });
-        $('button.editTable').html('<i class="material-icons"style="color:#757575;">edit</i>');
-        $('button.editTable').removeClass('selected');
+
+        $('#edit').html('<i class="material-icons"style="color:#757575;">edit</i>');
+        $('#edit').removeClass('selected');
       } else {
-        $('button.tables').prop('disabled', true);
-        $('button.main').prop('disabled', true);
-        $('input#query').prop('disabled', true);
-        $('td').attr('contenteditable', 'true');
+        $('button.tables, button.main, input#query').prop('disabled', true);
+//        $('td').attr('contenteditable', 'true');
         $('td').addClass('edit');
-        $('button.editTable').html('<i class="material-icons" style="font-size:18px; color:#757575;">save</i>');
+        $('#edit').html('<i class="material-icons" style="font-size:18px; color:#757575;">save</i>');
 
         $('.edit').click(function() {
           var tableName = $('#query').val(),
@@ -382,33 +435,12 @@ $(function() {
         });
 
       } //tohere
-    }); //button.editTable click
+    }); //#edit click
 
-    $('button#commit').click(function(event) {
-
+    $('#commit').click(function() {
       //place bootbox warning here
-    bootbox.confirm({
-    title: "Commit Changes To Database",
-    message: "Are you sure? This cannot be undone. Only saved changes will be commited",
-    buttons: {
-        cancel: {
-            label: '<i class="fa fa-times"></i> Cancel'
-        },
-        confirm: {
-            label: '<i class="fa fa-check"></i> Confirm'
-        }
-    },
-    callback: function (result) {
-      if(result){
-      socket.emit('commit-changes', changes);
-      changes = [];
-      $('td').attr('contenteditable', 'false');
-      $('td').removeClass('edit');
-    }
-  }
-  });
 
-    });
+    }); //#commit
 
     $('button.admin').click(function() {
       function sendpassword(result) {
@@ -466,10 +498,6 @@ $(function() {
       }
     }); //#inputfilter click
 
-    $(document).on('focus', 'td', function() {
-      position = [$(this).index(), $(this).parent().index()];
-    }); //document focus td
-
     $('#query').keydown(function(e) {
       if (e.which === 13) { //enter
         createTable();
@@ -484,14 +512,14 @@ $(function() {
         return;
       }
 
-      if (e.key === 'Home') {
+      if (e.key == 'Home') {
         if (e.ctrlKey) {
           goto(position[0], 1);
           changeOffset(0);
         } else {
           goto(2, position[1]);
         }
-      } else if (e.key === 'End') {
+      } else if (e.key == 'End') {
         if (e.ctrlKey) {
           goto(position[0], pageHeight);
           changeOffset(recordCount - pageHeight);
@@ -549,7 +577,7 @@ $(function() {
       }
     }); //document keydown
 
-    $('button#excel').click(function() {
+    $('#excel').click(function() {
       var url = 'data:application/vnd.ms-excel,' + encodeURIComponent($('#data').html())
 
       location.href = url
@@ -558,7 +586,7 @@ $(function() {
 
     $(document).on('click', '.exit', function(event) {
       event.stopPropagation();
-      DEBUG_MODE ? console.log($(this).data('IP')) : '';
+      DEBUG_MODE && console.log($(this).data('IP'));
       socket.emit('adminBoot', $(this).data('IP'));
     });
 
@@ -616,7 +644,7 @@ $(function() {
       ' where `' + field + '` < ' + find + ' or `' + field + '` is null' +
       ') as ALIAS';
 
-    DEBUG_MODE ? console.log(sq) : '';
+    DEBUG_MODE && console.log(sq);
     socket.emit('query', sq, 'info');
   } //search
   //________________________________________________________________________________________________________________________
@@ -651,7 +679,7 @@ $(function() {
       socket.emit('query', `drop table temp`);
       currentTable = table;
     } else {
-      $('button.editTable').html('<i class="material-icons" style="color:#757575;">edit</i>');
+      $('#edit').html('<i class="material-icons" style="color:#757575;">edit</i>');
       socket.emit('query', sql, format);
     }
   } //createTable
