@@ -1,0 +1,8 @@
+-add functionality that does not allow user to leave until changes are commited
+or dropped
+-add filter entire table functionality (change sql)
+-make button to view local saved changes
+-fix commit button disappearing on refresh
+-once user types in edit mode cell content should disappear
+-control e triggers edit mode
+-f2 jumps into cell keeps content 
